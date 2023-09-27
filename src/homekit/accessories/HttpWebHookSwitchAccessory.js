@@ -23,6 +23,10 @@ function HttpWebHookSwitchAccessory(ServiceParam, CharacteristicParam, platform,
   this.offForm = switchConfig["off_form"] || "";
   this.offHeaders = switchConfig["off_headers"] || "{}";
 
+  this.manufacturer = switchConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = switchConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = switchConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

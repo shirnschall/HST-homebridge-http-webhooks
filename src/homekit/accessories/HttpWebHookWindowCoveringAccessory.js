@@ -44,6 +44,10 @@ function HttpWebHookWindowCoveringAccessory(ServiceParam, CharacteristicParam, p
   this.setTargetPositionCloseForm = windowcoveringConfig["close_form"] || "";
   this.setTargetPositionCloseHeaders = windowcoveringConfig["close_headers"] || "{}";
   this.autoSetCurrentPosition = windowcoveringConfig["auto_set_current_position"] || false;
+  
+  this.manufacturer = windowcoveringConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = windowcoveringConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = windowcoveringConfig["serialPrefix"] || "HttpWebHookAccessory-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);

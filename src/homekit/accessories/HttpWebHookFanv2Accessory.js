@@ -65,6 +65,10 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     this.rotationDirectionForm = fanv2Config["rotation_direction_form"] || "";
     this.rotationDirectionHeaders = fanv2Config["rotation_direction_headers"] || "{}";
 
+    this.manufacturer = fanv2Config["manufacturer"] || "HttpWebHooksPlatform";
+    this.modelPrefix = fanv2Config["modelPrefix"] || "HttpWebHookAccessory-";
+    this.serialPrefix = fanv2Config["serialPrefix"] || "HttpWebHookAccessory-";
+
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
     this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

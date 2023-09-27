@@ -24,6 +24,10 @@ function HttpWebHookOutletAccessory(ServiceParam, CharacteristicParam, platform,
   this.offForm = outletConfig["off_form"] || "";
   this.offHeaders = outletConfig["off_headers"] || "{}";
 
+  this.manufacturer = outletConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = outletConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = outletConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

@@ -19,6 +19,10 @@ function HttpWebHookSecurityAccessory(ServiceParam, CharacteristicParam, platfor
   this.setStateForm = securityConfig["set_state_form"] || "";
   this.setStateHeaders = securityConfig["set_state_headers"] || "{}";
 
+  this.manufacturer = securityConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = securityConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = securityConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

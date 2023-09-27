@@ -19,6 +19,10 @@ function HttpWebHookPushButtonAccessory(ServiceParam, CharacteristicParam, platf
   this.pushForm = pushButtonConfig["push_form"] || "";
   this.pushHeaders = pushButtonConfig["push_headers"] || "{}";
 
+  this.manufacturer = pushButtonConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = pushButtonConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = pushButtonConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

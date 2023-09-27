@@ -24,6 +24,10 @@ function HttpWebHookGarageDoorOpenerAccessory(ServiceParam, CharacteristicParam,
   this.setTargetDoorStateCloseForm = garageDoorOpenerConfig["close_form"] || "";
   this.setTargetDoorStateCloseHeaders = garageDoorOpenerConfig["close_headers"] || "{}";
 
+  this.manufacturer = garageDoorOpenerConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = garageDoorOpenerConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = garageDoorOpenerConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

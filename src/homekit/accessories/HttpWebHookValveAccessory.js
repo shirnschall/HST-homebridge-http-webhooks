@@ -24,6 +24,10 @@ function HttpWebHookValveAccessory(ServiceParam, CharacteristicParam, platform, 
     this.offForm = valveConfig["off_form"] || "";
     this.offHeaders = valveConfig["off_headers"] || "{}";
 
+    this.manufacturer = valveConfig["manufacturer"] || "HttpWebHooksPlatform";
+    this.modelPrefix = valveConfig["modelPrefix"] || "HttpWebHookAccessory-";
+    this.serialPrefix = valveConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
     this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

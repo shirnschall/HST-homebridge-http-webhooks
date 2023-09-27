@@ -13,6 +13,10 @@ function HttpWebHookCarbonDioxideSensorAccessory(ServiceParam, CharacteristicPar
   this.type = "co2";
   this.co2PeakLevel = sensorConfig["co2_peak_level"] || 1200;
 
+  this.manufacturer = sensorConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = sensorConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = sensorConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

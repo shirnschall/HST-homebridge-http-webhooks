@@ -30,6 +30,10 @@ function HttpWebHookLightBulbAccessory(ServiceParam, CharacteristicParam, platfo
   this.brightnessHeaders = lightConfig["brightness_headers"] || "{}";
   this.brightnessFactor = lightConfig["brightness_factor"] || 1;
 
+  this.manufacturer = lightConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = lightConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = lightConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

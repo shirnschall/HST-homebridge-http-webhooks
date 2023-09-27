@@ -27,6 +27,10 @@ function HttpWebHookThermostatAccessory(ServiceParam, CharacteristicParam, platf
   this.setTargetHeatingCoolingStateForm = thermostatConfig["set_target_heating_cooling_state_form"] || "";
   this.setTargetHeatingCoolingStateHeaders = thermostatConfig["set_target_heating_cooling_state_headers"] || "{}";
 
+  this.manufacturer = thermostatConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = thermostatConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = thermostatConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);

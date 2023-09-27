@@ -13,6 +13,10 @@ function HttpWebHookStatelessSwitchAccessory(ServiceParam, CharacteristicParam, 
   this.name = statelessSwitchConfig["name"];
   this.buttons = statelessSwitchConfig["buttons"] || [];
 
+  this.manufacturer = statelessSwitchConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = statelessSwitchConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = statelessSwitchConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.service = [];
   for (var index = 0; index < this.buttons.length; index++) {
     var single_press = this.buttons[index]["single_press"] === undefined ? true : this.buttons[index]["single_press"];

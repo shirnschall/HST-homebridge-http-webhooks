@@ -24,6 +24,10 @@ function HttpWebHookLockMechanismAccessory(ServiceParam, CharacteristicParam, pl
   this.setLockTargetStateCloseForm = lockMechanismOpenerConfig["close_form"] || "";
   this.setLockTargetStateCloseHeaders = lockMechanismOpenerConfig["close_headers"] || "{}";
 
+  this.manufacturer = lockMechanismOpenerConfig["manufacturer"] || "HttpWebHooksPlatform";
+  this.modelPrefix = lockMechanismOpenerConfig["modelPrefix"] || "HttpWebHookAccessory-";
+  this.serialPrefix = lockMechanismOpenerConfig["serialPrefix"] || "HttpWebHookAccessory-";
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);
