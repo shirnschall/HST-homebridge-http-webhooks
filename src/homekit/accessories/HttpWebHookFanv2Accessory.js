@@ -68,6 +68,8 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     this.manufacturer = fanv2Config["manufacturer"] || "HttpWebHooksPlatform";
     this.modelPrefix = fanv2Config["modelPrefix"] || "HttpWebHookAccessory-";
     this.serialPrefix = fanv2Config["serialPrefix"] || "HttpWebHookAccessory-";
+    
+    this.preventResets = fanv2Config["preventResets"] || true;
 
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -78,6 +80,7 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     this.service.getCharacteristic(Characteristic.Active).on('get', this.getState.bind(this)).on('set', this.setState.bind(this));
     this.service.getCharacteristic(Characteristic.RotationSpeed).on('get', this.getSpeed.bind(this)).on('set', this.setSpeed.bind(this));
     this.service.getCharacteristic(Characteristic.RotationDirection).on('get', this.getRotationDirection.bind(this)).on('set', this.setRotationDirection.bind(this));
+
 
     if (this.enableLockPhysicalControls) {
         this.service.getCharacteristic(Characteristic.LockPhysicalControls).on('get', this.getLockState.bind(this)).on('set', this.setLockState.bind(this));
@@ -194,14 +197,14 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
 HttpWebHookFanv2Accessory.prototype.setSpeed = function (speedArg, callback, context) {
     //prevent reset of adjustable value to 100% when turning accessory on manually in case homekit forgot previous value
     //in this case the accessory is off but homekit sends value==100. ignore it and send the cached value instead to update homekit.
-    var speed;
-    var state = this.storage.getItemSync("http-webhook-" + this.id);
-    var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
-    if(speedArg == 100 && state == false){
-        speed=cachedSpeed;
-        this.log("Fanv2 prevent rotation speed reset for '%s'...", this.id);
-    }else{
-        speed=speedArg;
+    var speed = speedArg;
+    if(this.preventResets){
+        var state = this.storage.getItemSync("http-webhook-" + this.id);
+        var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
+        if(speedArg == 100 && state == false){
+            speed=cachedSpeed;
+            this.log("Fanv2 prevent rotation speed reset for '%s'...", this.id);
+        }
     }
 
     

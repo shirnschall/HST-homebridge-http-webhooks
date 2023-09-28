@@ -34,6 +34,8 @@ function HttpWebHookLightBulbAccessory(ServiceParam, CharacteristicParam, platfo
   this.modelPrefix = lightConfig["modelPrefix"] || "HttpWebHookAccessory-";
   this.serialPrefix = lightConfig["serialPrefix"] || "HttpWebHookAccessory-";
 
+  this.preventResets = lightConfig["preventResets"] || true;
+
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
   this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);
@@ -126,15 +128,16 @@ HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
 HttpWebHookLightBulbAccessory.prototype.setBrightness = function(brightnessArg, callback, context) {
   //prevent reset of adjustable value to 100% when turning accessory on manually in case homekit forgot previous value
   //in this case the accessory is off but homekit sends value==100. ignore it and send the cached value instead to update homekit.
-  var brightness;
-  var state = this.storage.getItemSync("http-webhook-" + this.id);
-  var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
-  if(brightnessArg == 100 && state == false){
-    brightness=cachedBrightness;
-    this.log("Light prevent brightness reset for '%s'...", this.id);
-  }else{
-    brightness=brightnessArg;
+  var brightness = brightnessArg;
+  if(this.preventResets){
+    var state = this.storage.getItemSync("http-webhook-" + this.id);
+    var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
+    if(brightnessArg == 100 && state == false){
+      brightness=cachedBrightness;
+      this.log("Light prevent brightness reset for '%s'...", this.id);
+    }
   }
+
   this.log("Light brightness for '%s'...", this.id);
   var newState = brightness > 0;
   this.storage.setItemSync("http-webhook-" + this.id, newState);
