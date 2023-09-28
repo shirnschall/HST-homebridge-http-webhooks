@@ -191,7 +191,19 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
     callback(null, parseInt(speed));
 };
 
-HttpWebHookFanv2Accessory.prototype.setSpeed = function (speed, callback, context) {
+HttpWebHookFanv2Accessory.prototype.setSpeed = function (speedArg, callback, context) {
+    //prevent reset to 100% when turning fan on manually in case homekit forgot previous value
+    //in this case fan is off but homekit sends speed==100. ignore it.
+    var speed
+    var state = this.storage.getItemSync("http-webhook-" + this.id);
+    var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
+    if(speedArg == 100 && state == false){
+        speed=cachedSpeed;
+    }else{
+        speed=speedArg;
+    }
+
+    
     this.log("Fanv2 rotation speed for '%s'...", this.id);
     var newState = speed > 0;
     this.storage.setItemSync("http-webhook-" + this.id, newState);
