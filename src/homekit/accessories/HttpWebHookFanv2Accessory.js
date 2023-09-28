@@ -199,6 +199,7 @@ HttpWebHookFanv2Accessory.prototype.setSpeed = function (speedArg, callback, con
     var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
     if(speedArg == 100 && state == false){
         speed=cachedSpeed;
+        this.log("Fanv2 prevent rotation speed reset for '%s'...", this.id);
     }else{
         speed=speedArg;
     }
