@@ -69,8 +69,6 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     this.modelPrefix = fanv2Config["modelPrefix"] || "HttpWebHookAccessory-";
     this.serialPrefix = fanv2Config["serialPrefix"] || "HttpWebHookAccessory-";
 
-    this.speed = 100;       //issues when more than one fan is used..
-
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
     this.informationService.setCharacteristic(Characteristic.Model, this.modelPrefix + this.name);
@@ -106,7 +104,7 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
         this.service.getCharacteristic(Characteristic.Active).updateValue((urlParams.state == "true"), undefined, Constants.CONTEXT_FROM_WEBHOOK);
     }
     if (urlParams.speed != null) {
-        var cachedSpeed = this.speed;
+        var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
         var speed = parseInt(urlParams.speed);
         if (cachedSpeed != speed) {
             this.log("Change speed for fanv2 to '%d'.", speed);
@@ -185,7 +183,7 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
     }
     var speed = 0;
     if (state) {
-        speed = this.speed;
+        speed = this.storage.getItemSync("http-webhook-speed-" + this.id);
         if (speed === undefined) {
             speed = 100;
         }
@@ -198,8 +196,6 @@ HttpWebHookFanv2Accessory.prototype.setSpeed = function (speed, callback, contex
     var newState = speed > 0;
     this.storage.setItemSync("http-webhook-" + this.id, newState);
     this.storage.setItemSync("http-webhook-speed-" + this.id, speed);
-    this.speed=speed;
-    this.log("cached speed set to %d", this.speed);
     var speedFactor = this.speedFactor;
     var speedToSet = Math.ceil(speed * speedFactor);
     var urlToCall = this.replaceVariables(this.speedURL, newState, speedToSet);
