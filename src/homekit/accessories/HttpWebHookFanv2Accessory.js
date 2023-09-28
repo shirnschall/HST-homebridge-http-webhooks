@@ -192,9 +192,9 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
 };
 
 HttpWebHookFanv2Accessory.prototype.setSpeed = function (speedArg, callback, context) {
-    //prevent reset to 100% when turning fan on manually in case homekit forgot previous value
-    //in this case fan is off but homekit sends speed==100. ignore it.
-    var speed
+    //prevent reset of adjustable value to 100% when turning accessory on manually in case homekit forgot previous value
+    //in this case the accessory is off but homekit sends value==100. ignore it and send the cached value instead to update homekit.
+    var speed;
     var state = this.storage.getItemSync("http-webhook-" + this.id);
     var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
     if(speedArg == 100 && state == false){
