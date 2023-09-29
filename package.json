@@ -1,5 +1,5 @@
 {
-  "name": "HST-homebridge-http-webhooks",
+  "name": "homebridge-HST-http-webhooks",
   "version": "0.1.18",
   "displayName": "HST Homebridge Webhooks",
   "description": "A plugin to support http accessories/webhooks for Homebridge: https://github.com/nfarina/homebridge",
@@ -39,10 +39,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:shirnschall/HST-homebridge-http-webhooks.git"
+    "url": "git@github.com:shirnschall/homebridge-HST-http-webhooks.git"
   },
   "bugs": {
-    "url": "https://github.com/shirnschall/HST-homebridge-http-webhooks/issues"
+    "url": "https://github.com/shirnschall/homebridge-HST-http-webhooks/issues"
   },
   "engines": {
     "node": ">=9.11.2",
@@ -54,6 +54,6 @@
     "request": "2.87.x",
     "selfsigned": "^1.10.7"
   },
-  "homepage": "https://github.com/shirnschall/HST-homebridge-http-webhooks#readme",
+  "homepage": "https://github.com/shirnschall/homebridge-HST-http-webhooks#readme",
   "author": "shirnschall,benzman81"
 }
