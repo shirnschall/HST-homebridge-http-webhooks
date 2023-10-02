@@ -1,8 +1,8 @@
 {
-  "name": "homebridge-http-webhooks",
-  "version": "0.1.17",
-  "displayName": "Homebridge Webhooks",
-  "description": "A http plugin with support of webhooks for Homebridge: https://github.com/nfarina/homebridge",
+  "name": "homebridge-HST-http-webhooks",
+  "version": "0.1.18",
+  "displayName": "HST Homebridge Webhooks",
+  "description": "A plugin to support http accessories/webhooks for Homebridge: https://github.com/nfarina/homebridge",
   "license": "GPL-3.0",
   "keywords": [
     "homebridge-plugin",
@@ -13,16 +13,36 @@
     "httpwebhooks",
     "http-webhooks",
     "http webhooks",
+    "http light",
+    "http temperature",
+    "http humidity",
+    "http co2",
+    "http garage door opener",
+    "http light bulb",
+    "http lock",
+    "http outlet",
+    "http push button",
+    "http security",
+    "http sensor",
+    "http stateless switch",
+    "http switch",
+    "http thermostat",
+    "http valve",
+    "http window blinds",
+    "http window covering",
+    "http dht",
+    "http fan",
     "smart",
     "homekit",
-    "siri"
+    "siri",
+    "hirnschall"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:benzman81/homebridge-http-webhooks.git"
+    "url": "git@github.com:shirnschall/homebridge-HST-http-webhooks.git"
   },
   "bugs": {
-    "url": "https://github.com/benzman81/homebridge-http-webhooks/issues"
+    "url": "https://github.com/shirnschall/homebridge-HST-http-webhooks/issues"
   },
   "engines": {
     "node": ">=9.11.2",
@@ -34,6 +54,6 @@
     "request": "2.87.x",
     "selfsigned": "^1.10.7"
   },
-  "homepage": "https://github.com/benzman81/homebridge-http-webhooks#readme",
-  "author": "benzman81"
+  "homepage": "https://github.com/shirnschall/homebridge-HST-http-webhooks#readme",
+  "author": "shirnschall,benzman81"
 }
