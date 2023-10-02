@@ -104,6 +104,7 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
         var state = urlParams.state || cachedState;
         var stateBool = state === "true" || state === true;
         this.log("Change state for fanv2 to '%s'.", stateBool);
+
         this.service.getCharacteristic(Characteristic.Active).updateValue((urlParams.state == "true"), undefined, Constants.CONTEXT_FROM_WEBHOOK);
     }
     if (urlParams.speed != null) {
@@ -152,8 +153,10 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
 }
 
 HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
-    this.log("Getting current state for '%s'...", this.id);
     var state = this.storage.getItemSync("http-webhook-" + this.id);
+    
+    var stateBool = state === "true" || state === true;
+    this.log("Getting current state for '%s' (='%s').", this.id,stateBool);
     if (state === undefined) {
         state = false;
     }
