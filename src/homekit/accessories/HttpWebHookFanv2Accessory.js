@@ -190,7 +190,8 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
     if (state === undefined) {
         state = false;
     }
-    var speed;
+    var speed = 0;
+    //here we run into issues as we have not updated cachedspeed to 0
     if (state) {
         speed = this.storage.getItemSync("http-webhook-speed-" + this.id);
         if (speed === undefined) {
