@@ -96,14 +96,6 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
 }
 
 HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
-    if (urlParams.speed != null) {
-        var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
-        var speed = parseInt(urlParams.speed);
-        if (cachedSpeed != speed) {
-            this.log("Change speed for fanv2 to '%d'.", speed);
-            this.service.getCharacteristic(Characteristic.RotationSpeed).updateValue(speed, undefined, Constants.CONTEXT_FROM_WEBHOOK);
-        }
-    }
     if (urlParams.state != cachedState) {
         var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
         if (cachedState === undefined) {
@@ -113,6 +105,14 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
         var stateBool = state === "true" || state === true;
         this.log("Change state for fanv2 to '%s'.", stateBool);
         this.service.getCharacteristic(Characteristic.Active).updateValue((urlParams.state == "true"), undefined, Constants.CONTEXT_FROM_WEBHOOK);
+    }
+    if (urlParams.speed != null) {
+        var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
+        var speed = parseInt(urlParams.speed);
+        if (cachedSpeed != speed) {
+            this.log("Change speed for fanv2 to '%d'.", speed);
+            this.service.getCharacteristic(Characteristic.RotationSpeed).updateValue(speed, undefined, Constants.CONTEXT_FROM_WEBHOOK);
+        }
     }
     if (urlParams.swingMode != null && this.enableSwingModeControls) {
         var cachedSwingMode = this.storage.getItemSync("http-webhook-swingmode-" + this.id);
