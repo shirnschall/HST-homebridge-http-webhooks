@@ -245,7 +245,8 @@ HttpWebHookFanv2Accessory.prototype.getLockState = function (callback) {
         lockstate = false;
     }
     
-    this.log("HomeKit: Get '%s' lock state ('%s').", this.id ,lockstate);
+    var stateBool = lockstate === "true" || lockstate === true;
+    this.log("HomeKit: Get '%s' lock state ('%s').", this.id ,stateBool);
     callback(null, lockstate);
 };
 
@@ -273,7 +274,8 @@ HttpWebHookFanv2Accessory.prototype.getTargetState = function (callback) {
     if (targetState === undefined) {
         targetState = false;
     }
-    this.log("HomeKit: Get '%s' target state ('%s').", this.id ,targetState);
+    var stateBool = targetState === "true" || targetState === true;
+    this.log("HomeKit: Get '%s' target state ('%s').", this.id ,stateBool);
     callback(null, targetState);
 };
 
@@ -299,7 +301,8 @@ HttpWebHookFanv2Accessory.prototype.getSwingMode = function (callback) {
     if (swingMode === undefined) {
         swingMode = false;
     }
-    this.log("HomeKit: Get '%s' swing mode ('%s').", this.id ,swingMode);
+    var modeBool = swingMode === "true" || swingMode === true;
+    this.log("HomeKit: Get '%s' swing mode ('%s').", this.id ,modeBool);
     callback(null, swingMode);
 };
 
@@ -325,7 +328,8 @@ HttpWebHookFanv2Accessory.prototype.getRotationDirection = function (callback) {
     if (rotationDirection === undefined) {
         rotationDirection = false;
     }
-    this.log("HomeKit: Get '%s' rotation direction ('%s').", this.id ,rotationDirection);
+    var directionBool = rotationDirection === "true" || rotationDirection === true;
+    this.log("HomeKit: Get '%s' rotation direction ('%s').", this.id ,directionBool);
     callback(null, rotationDirection);
 };
 
