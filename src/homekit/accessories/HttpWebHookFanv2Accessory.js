@@ -190,19 +190,14 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
     if (state === undefined) {
         state = false;
     }
-    var speed;
+    //setting values to 0 without updating cachedValue may result in homekit resetting the value to 100% once the device is turned on, if getValue was called when the device was off
     var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
-    //here we run into issues as we have not updated cachedspeed to 0
-    //if (state) {
-    speed = cachedSpeed;
-    if (speed === undefined) {
-        speed = 100;
+    if (cachedSpeed === undefined) {
+        cachedSpeed = 100;
+        this.storage.setItemSync("http-webhook-speed-" + this.id, cachedSpeed);   //update cached speed
     }
-    //}
-    if(speed != cachedSpeed){
-        this.storage.setItemSync("http-webhook-speed-" + this.id, speed);   //update cached speed
-    }
-    callback(null, parseInt(speed));
+
+    callback(null, parseInt(cachedSpeed));
 };
 
 HttpWebHookFanv2Accessory.prototype.setSpeed = function (speedArg, callback, context) {

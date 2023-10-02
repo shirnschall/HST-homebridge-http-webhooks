@@ -115,14 +115,14 @@ HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
   if (state === undefined) {
     state = false;
   }
-  var brightness = 0;
-  if (state) {
-    brightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
-    if (brightness === undefined) {
-      brightness = 100;
-    }
+  //setting values to 0 without updating cachedValue may result in homekit resetting the value to 100% once the device is turned on, if getValue was called when the device was off
+  var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
+  if (cachedBrightness === undefined) {
+    cachedBrightness = 100;
+    this.storage.setItemSync("http-webhook-brightness-" + this.id, cachedBrightness);
   }
-  callback(null, parseInt(brightness));
+
+  callback(null, parseInt(cachedBrightness));
 };
 
 HttpWebHookLightBulbAccessory.prototype.setBrightness = function(brightnessArg, callback, context) {
