@@ -5,9 +5,17 @@ The plugin gets its states from any system that is calling the url to trigger a 
 
 Currently supports contact, motion, occupancy, smoke sensors, switches, push buttons, lights (only on/off and brightness), temperature sensors, humidity sensors, thermostats, CO2 sensors and leak sensors.
 
+# Added Features
+This plugin is a fork of Markus Krueger's homebridge-http-webhooks plugin. The following changes have been made so far or is planned:
+- [x] prevent homekit from resetting dimmable devices (e.g. lamps, fans) to 100% when turning them on after they have been off for some time. Furthermore, devices that are off sometimes stay at 0% (=off) when turned on from an external event (e.g. a physical switch).
+- [x] added "manufacturer", "modelPrefix", and "serialPrefix" config options for each accessory to customize manufacturer, model number, and serial number displayed in homekit.
+- [x] fixed/changed miscellaneous log issues.
+- [ ] update documentation and installation preocedure (fix package.json naming problems)
+
+
 # Installation
 1. Install homebridge using: `npm install -g homebridge`
-2. Install this plugin using: `npm install -g homebridge-http-webhooks`
+2. Install this plugin using: `npm install -g https://github.com/shirnschall/homebridge-HST-http-webhooks.git#shirnschall`
 3. Update your configuration file. See sample-config.json snippet below.
 
 # Retrieve state
