@@ -103,8 +103,8 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
         }
         var state = urlParams.state || cachedState;
         var stateBool = state === "true" || state === true;
-        this.log("External: Set '%s' state to '%s'.",this.id , stateBool);
-        
+        this.log("\x1b[38;2;253;182;mExternal\x1b[0m: Set '%s' state to '%s'.",this.id , stateBool);
+
         this.storage.setItemSync("http-webhook-" + this.id, state);   //update cached speed
         this.service.getCharacteristic(Characteristic.Active).updateValue((urlParams.state == "true"), undefined, Constants.CONTEXT_FROM_WEBHOOK);
     }
@@ -170,7 +170,7 @@ HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
 
 HttpWebHookFanv2Accessory.prototype.setState = function (powerOn, callback, context) {
     var stateBool = powerOn === "true" || powerOn === true;
-    this.log("HomeKit: Set '%s' state to '%s'.", this.id ,stateBool);
+    this.log("\x1b[36mHomeKit\x1b[0m: Set '%s' state to '%s'.", this.id ,stateBool);
     this.storage.setItemSync("http-webhook-" + this.id, powerOn);
     var urlToCall = this.onURL;
     var urlMethod = this.onMethod;
