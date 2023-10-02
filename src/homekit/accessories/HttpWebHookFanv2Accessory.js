@@ -104,13 +104,7 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
             this.service.getCharacteristic(Characteristic.RotationSpeed).updateValue(speed, undefined, Constants.CONTEXT_FROM_WEBHOOK);
         }
     }
-    //set speed before state in case homekit forgot value
     if (urlParams.state != cachedState) {
-        //if state is changed without speed change, send cached speed
-        if (urlParams.speed == null) {
-            this.log("Sending cached speed for fanv2 ('%d\%').", cachedSpeed);
-            this.service.getCharacteristic(Characteristic.RotationSpeed).updateValue(cachedSpeed, undefined, Constants.CONTEXT_FROM_WEBHOOK);
-        }
         var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
         if (cachedState === undefined) {
             cachedState = false;
