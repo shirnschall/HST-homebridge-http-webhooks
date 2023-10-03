@@ -11,6 +11,7 @@ This plugin is a fork of Markus Krueger's homebridge-http-webhooks plugin. The f
 - [x] added "manufacturer", "modelPrefix", and "serialPrefix" config options for each accessory to customize manufacturer, model number, and serial number displayed in homekit.
 - [x] added caching when external events change accessory value (e.g. a switch changes light on/off). Previously These external inputs would change the state but not reflect in homekit after a reload.
 - [x] fixed/changed miscellaneous log issues and several type issues (expected number but received "nan").
+- [x] fixed several return type issues to now be inline with the homebridge api reference.
 - [x] changed log messages to be more expressive (added color, homekit/external input prefix, current get/set state)
 - [ ] update documentation and installation preocedure (fix package.json naming problems)
 
