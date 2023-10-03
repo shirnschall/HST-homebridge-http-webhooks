@@ -1,5 +1,5 @@
 {
-  "name": "HST-http-webhooks",
+  "name": "homebridge-HST-http-webhooks",
   "version": "0.1.19",
   "displayName": "HST http Webhooks",
   "description": "A plugin to support http accessories/webhooks for Homebridge: https://github.com/nfarina/homebridge",
