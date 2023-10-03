@@ -7,6 +7,18 @@
   "schema": {
     "type": "object",
     "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "default": "homebridge-HST-http-webhooks"
+      },
+      "platform": {
+        "title": "Platform Name",
+        "type": "string",
+        "required": true,
+        "default": "HSTHttp"
+      },
       "webhook_port": {
         "title": "Webhook Port",
         "type": "string",
