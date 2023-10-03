@@ -161,7 +161,7 @@ HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
     var state = this.storage.getItemSync("http-webhook-" + this.id);
     
     var stateBool = state === "true" || state === true;
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' state ('%s').", this.id ,stateBool);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' state ('%s').", this.id ,stateBool);
     if (state === undefined) {
         state = false;
     }
@@ -199,7 +199,7 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
         this.storage.setItemSync("http-webhook-speed-" + this.id, cachedSpeed);   //update cached speed
     }
 
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' speed ('%s\%').", this.id ,cachedSpeed);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' speed ('%s\%').", this.id ,cachedSpeed);
     callback(null, parseInt(cachedSpeed));
 };
 
@@ -246,7 +246,7 @@ HttpWebHookFanv2Accessory.prototype.getLockState = function (callback) {
     }
     
     var stateBool = lockstate === "true" || lockstate === true;
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' lock state ('%s').", this.id ,stateBool);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' lock state ('%s').", this.id ,stateBool);
     callback(null, stateBool?1:0);
 };
 
@@ -275,7 +275,7 @@ HttpWebHookFanv2Accessory.prototype.getTargetState = function (callback) {
         targetState = false;
     }
     var stateBool = targetState === "true" || targetState === true;
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' target state ('%s').", this.id ,stateBool);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' target state ('%s').", this.id ,stateBool);
     callback(null, stateBool?1:0);
 };
 
@@ -302,7 +302,7 @@ HttpWebHookFanv2Accessory.prototype.getSwingMode = function (callback) {
         swingMode = false;
     }
     var modeBool = swingMode === "true" || swingMode === true;
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' swing mode ('%s').", this.id ,modeBool);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' swing mode ('%s').", this.id ,modeBool);
     callback(null, modeBool?1:0);
 };
 
@@ -329,7 +329,7 @@ HttpWebHookFanv2Accessory.prototype.getRotationDirection = function (callback) {
         rotationDirection = false;
     }
     var directionBool = rotationDirection === "true" || rotationDirection === true;
-    this.log("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' rotation direction ('%s').", this.id ,directionBool);
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' rotation direction ('%s').", this.id ,directionBool);
     callback(null, directionBool?1:0);
 };
 
