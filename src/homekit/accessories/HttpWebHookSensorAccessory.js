@@ -84,7 +84,7 @@ HttpWebHookSensorAccessory.prototype.changeFromServer = function(urlParams) {
   this.log.debug("cached: "+ cached);
   this.log.debug("cached !== urlValue: "+ (cached !== urlValue));
   if (cached !== urlValue) {
-    this.log("Change HomeKit value for " + this.type + " sensor to '%s'.", urlValue);
+    this.log("\x1b[38;2;253;182;mExternal:\x1b[0m Set '%s' " + this.type + " to '%s'.", this.id ,urlValue);
 
     if (this.type === "contact") {
       this.service.getCharacteristic(Characteristic.ContactSensorState).updateValue(urlValue ? Characteristic.ContactSensorState.CONTACT_DETECTED : Characteristic.ContactSensorState.CONTACT_NOT_DETECTED, undefined, Constants.CONTEXT_FROM_WEBHOOK);
@@ -140,9 +140,10 @@ HttpWebHookSensorAccessory.prototype.changeFromServer = function(urlParams) {
 };
 
 HttpWebHookSensorAccessory.prototype.getState = function(callback) {
-  this.log.debug("Getting current state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-" + this.id);
-  this.log.debug("State for '%s' is '%s'", this.id, state);
+
+  this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' " + this.type + " value ('%s').", this.id ,state);
+  
   if (state === undefined) {
     state = false;
   }
