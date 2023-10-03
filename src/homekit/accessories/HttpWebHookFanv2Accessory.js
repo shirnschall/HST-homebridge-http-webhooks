@@ -169,7 +169,7 @@ HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
 };
 
 HttpWebHookFanv2Accessory.prototype.setState = function (powerOn, callback, context) {
-    var stateBool = powerOn === "true" || powerOn === true;
+    var stateBool = powerOn ? "true":"false";
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' state to '%s'.", this.id ,stateBool);
     this.storage.setItemSync("http-webhook-" + this.id, powerOn);
     var urlToCall = this.onURL;
