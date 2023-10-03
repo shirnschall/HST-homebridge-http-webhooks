@@ -13,6 +13,7 @@ This plugin is a fork of Markus Krueger's homebridge-http-webhooks plugin. The f
 - [x] fixed/changed miscellaneous log issues and several type issues (expected number but received "nan").
 - [x] fixed several return type issues to now be inline with the homebridge api reference.
 - [x] changed log messages to be more expressive (added color, homekit/external input prefix, current get/set state)
+- [x] changed platform name from "HttpWebHooks" to "HSTHttp" and plugin name from "homebridge-http-webhooks" to "homebridge-HST-http-webhooks".
 - [ ] update documentation and installation preocedure (fix package.json naming problems)
 
 
