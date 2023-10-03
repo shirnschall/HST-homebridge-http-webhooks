@@ -10,6 +10,7 @@ This plugin is a fork of Markus Krueger's homebridge-http-webhooks plugin. The f
 - [x] prevent homekit from resetting dimmable devices (e.g. lamps, fans) to 100% when turning them on after they have been off for some time. Furthermore, devices that are off sometimes stay at 0% (=off) when turned on from an external event (e.g. a physical switch).
 - [x] added "manufacturer", "modelPrefix", and "serialPrefix" config options for each accessory to customize manufacturer, model number, and serial number displayed in homekit.
 - [x] fixed/changed miscellaneous log issues.
+- [x] changed log message to be more expressive (added color, homekit/external input prefix, current get/set state)
 - [ ] update documentation and installation preocedure (fix package.json naming problems)
 
 
