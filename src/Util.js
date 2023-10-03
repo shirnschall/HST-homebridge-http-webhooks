@@ -13,17 +13,17 @@ const callHttpApi = function(log, urlToCall, urlMethod, urlBody, urlForm, urlHea
     };
     if (urlMethod === "POST" || urlMethod === "PUT" || urlMethod === "PATCH") {
       if (urlForm) {
-        log("Adding Form " + urlForm);
+        log("\x1b[32mServer:\x1b[0m Add Form " + urlForm);
         theRequest.form = JSON.parse(urlForm);
       }
       else if (urlBody) {
-        log("Adding Body " + urlBody);
+        log("\x1b[32mServer:\x1b[0m Add Body " + urlBody);
         theRequest.body = urlBody;
       }
     }
     request(theRequest, (function(err, response, body) {
       var statusCode = response && response.statusCode ? response.statusCode : -1;
-      log("Request to '%s' finished with status code '%s' and body '%s'.", urlToCall, statusCode, body, err);
+      log("\x1b[32mServer:\x1b[0m GET '%s', status code '%s', body '%s'.", urlToCall, statusCode, body, err);
       if (!err && statusCode >= 200 && statusCode < 300) {
         if (onSuccessCallback) {
           onSuccessCallback();
@@ -34,7 +34,7 @@ const callHttpApi = function(log, urlToCall, urlMethod, urlBody, urlForm, urlHea
         if (onFailureCallback) {
           onFailureCallback();
         }
-        homeKitCallback(err || new Error("Request to '" + urlToCall + "' was not succesful."));
+        homeKitCallback(err || new Error("\x1b[31mServer:\x1b[0m GET '" + urlToCall + "' unsuccesful."));
       }
     }).bind(this));
   }

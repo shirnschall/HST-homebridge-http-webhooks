@@ -56,7 +56,7 @@ Server.prototype.getSSLServerOptions = function() {
   var sslServerOptions = {};
   if(this.https) {
     if(!this.httpsKeyFile || !this.httpsCertFile) {
-      this.log("Using automatic created ssl certificate.");
+      this.log("\x1b[32mServer:\x1b[0m Using automatically created ssl certificate.");
       var cachedSSLCert = this.storage.getItemSync("http-webhook-ssl-cert");
       if(cachedSSLCert) {
         var certVersion = cachedSSLCert.certVersion;
@@ -105,14 +105,14 @@ Server.prototype.createServerCallback = function() {
     var theUrlParams = theUrlParts.query;
     var body = [];
     request.on('error', (function(err) {
-      this.log("[ERROR Http WebHook Server] Reason: %s.", err);
+      this.log("\x1b[31mServer:\x1b[0m Error - %s.", err);
     }).bind(this)).on('data', function(chunk) {
       body.push(chunk);
     }).on('end', (function() {
       body = Buffer.concat(body).toString();
 
       response.on('error', function(err) {
-        this.log("[ERROR Http WebHook Server] Reason: %s.", err);
+        this.log("\x1b[31mServer:\x1b[0m Error - %s.", err);
       });
 
       response.statusCode = 200;
@@ -121,7 +121,7 @@ Server.prototype.createServerCallback = function() {
       if (!theUrlParams.accessoryId) {
         response.statusCode = 404;
         response.setHeader("Content-Type", "text/plain");
-        var errorText = "[ERROR Http WebHook Server] No accessoryId in request.";
+        var errorText = "\x1b[31mServer:\x1b[0m Error - No accessoryId in request.";
         this.log(errorText);
         response.write(errorText);
         response.end();
@@ -145,9 +145,9 @@ Server.prototype.createServerCallback = function() {
         else {
           response.statusCode = 404;
           response.setHeader("Content-Type", "text/plain");
-          var errorText = "[ERROR Http WebHook Server] AccessoryId '"+theUrlParams.accessoryId+"' did not return a response body from 'changeFromServer'.";
+          var errorText = "\x1b[31mServer:\x1b[0m Error - AccessoryId '"+theUrlParams.accessoryId+"' did not return a response body from 'changeFromServer'.";
           if(!found) {
-            errorText = "[ERROR Http WebHook Server] AccessoryId '"+theUrlParams.accessoryId+"' not found.";
+            errorText = "\x1b[31mServer:\x1b[0m Error - AccessoryId '"+theUrlParams.accessoryId+"' not found.";
           }
           this.log(errorText);
           response.write(errorText);
@@ -186,7 +186,7 @@ Server.prototype.start = function() {
       http.createServer(serverCallback).listen(this.webhookPort, this.webhookListenHost);
     }
   }
-  this.log("Started server for webhooks on port '%s' listening for host '%s'.", this.webhookPort, this.webhookListenHost);
+  this.log("\x1b[32mServer:\x1b[0m Listening for host '%s' on port '%s'.", this.webhookListenHost, this.webhookPort);
 };
 
 module.exports = Server;
