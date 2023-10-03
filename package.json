@@ -1,7 +1,7 @@
 {
-  "name": "homebridge-HST-http-webhooks",
+  "name": "HST-http-webhooks",
   "version": "0.1.18",
-  "displayName": "HST Homebridge Webhooks",
+  "displayName": "HST http Webhooks",
   "description": "A plugin to support http accessories/webhooks for Homebridge: https://github.com/nfarina/homebridge",
   "license": "GPL-3.0",
   "keywords": [
@@ -55,5 +55,5 @@
     "selfsigned": "^1.10.7"
   },
   "homepage": "https://github.com/shirnschall/homebridge-HST-http-webhooks#readme",
-  "author": "shirnschall,benzman81"
+  "author": "shirnschall"
 }
