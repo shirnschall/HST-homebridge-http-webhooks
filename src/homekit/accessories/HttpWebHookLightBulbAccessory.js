@@ -53,7 +53,7 @@ HttpWebHookLightBulbAccessory.prototype.changeFromServer = function(urlParams) {
   }
   var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
   if (cachedBrightness === undefined) {
-    cachedBrightness = -1;
+    cachedBrightness = 100;
   }
   if (!urlParams.state && !urlParams.value) {
     return {
@@ -69,11 +69,13 @@ HttpWebHookLightBulbAccessory.prototype.changeFromServer = function(urlParams) {
     this.storage.setItemSync("http-webhook-" + this.id, stateBool);
     var brightnessInt = parseInt(brightness);
     this.storage.setItemSync("http-webhook-brightness-" + this.id, brightnessInt);
-    if (cachedState !== stateBool || cachedBrightness != brightnessInt) {
-      var brightnessToSet = Math.ceil(brightnessInt / this.brightnessFactor);
-      this.log("Change HomeKit state for light to '%s'.", stateBool);
-      this.log("Change HomeKit brightness for light to '%s'.", brightnessToSet);
+    if (cachedState !== stateBool){
+      this.log("\x1b[38;2;253;182;mExternal:\x1b[0m Set '%s' state to '%s'.",this.id , stateBool);
       this.service.getCharacteristic(Characteristic.On).updateValue(stateBool, undefined, Constants.CONTEXT_FROM_WEBHOOK);
+    }
+    if(cachedBrightness != brightnessInt) {
+      var brightnessToSet = Math.ceil(brightnessInt / this.brightnessFactor);
+      this.log("\x1b[38;2;253;182;mExternal:\x1b[0m Set '%s' brightness to '%s'.",this.id , brightnessToSet);
       this.service.getCharacteristic(Characteristic.Brightness).updateValue(brightnessToSet, undefined, Constants.CONTEXT_FROM_WEBHOOK);
     }
     return {
@@ -83,16 +85,17 @@ HttpWebHookLightBulbAccessory.prototype.changeFromServer = function(urlParams) {
 };
 
 HttpWebHookLightBulbAccessory.prototype.getState = function(callback) {
-  this.log.debug("Getting current state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-" + this.id);
   if (state === undefined) {
     state = false;
   }
+  this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' state ('%s').", this.id ,state);
   callback(null, state);
 };
 
 HttpWebHookLightBulbAccessory.prototype.setState = function(powerOn, callback, context) {
-  this.log("Light state for '%s'...", this.id);
+  var stateBool = powerOn ? "true":"false";
+  this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' state to '%s'.", this.id ,stateBool);
   this.storage.setItemSync("http-webhook-" + this.id, powerOn);
   var urlToCall = this.onURL;
   var urlMethod = this.onMethod;
@@ -110,7 +113,6 @@ HttpWebHookLightBulbAccessory.prototype.setState = function(powerOn, callback, c
 };
 
 HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
-  this.log.debug("Getting current brightness for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-" + this.id);
   if (state === undefined) {
     state = false;
@@ -122,6 +124,7 @@ HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
     this.storage.setItemSync("http-webhook-brightness-" + this.id, cachedBrightness);
   }
 
+  this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' brightness ('%s').", this.id ,cachedBrightness);
   callback(null, parseInt(cachedBrightness));
 };
 
@@ -138,7 +141,7 @@ HttpWebHookLightBulbAccessory.prototype.setBrightness = function(brightnessArg, 
     }
   }
 
-  this.log("Light brightness for '%s'...", this.id);
+  this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' brightness to '%s'.", this.id ,brightness);
   var newState = brightness > 0;
   this.storage.setItemSync("http-webhook-" + this.id, newState);
   this.storage.setItemSync("http-webhook-brightness-" + this.id, brightness);
