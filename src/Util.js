@@ -23,7 +23,7 @@ const callHttpApi = function(log, urlToCall, urlMethod, urlBody, urlForm, urlHea
     }
     request(theRequest, (function(err, response, body) {
       var statusCode = response && response.statusCode ? response.statusCode : -1;
-      log("\x1b[32mServer:\x1b[0m GET '%s', status code '%s', body '%s'.", urlToCall, statusCode, body, err);
+      log("\x1b[32mServer:\x1b[0m %s '%s', status code '%s', body '%s'.",urlMethod, urlToCall, statusCode, body);
       if (!err && statusCode >= 200 && statusCode < 300) {
         if (onSuccessCallback) {
           onSuccessCallback();

@@ -31,7 +31,7 @@ Server.prototype.setAccessories = function(accessories) {
 };
 
 Server.prototype.createSSLCertificate = function() {
-  this.log("Generating new ssl certificate.");
+  this.log("\x1b[32mServer:\x1b[0m Generating new ssl certificate.");
   var selfsigned = require('selfsigned');
   var certAttrs = [{ name: 'homebridgeHttpWebhooks', value: 'homebridgeHttpWebhooks.com' , type: 'homebridgeHttpWebhooks'}];
   var certOpts = { days: Constants.CERT_DAYS};
