@@ -1,6 +1,6 @@
 const Constants = require('../../Constants');
 
-function HttpWebHookCarbonDioxideSensorAccessory(ServiceParam, CharacteristicParam, platform, sensorConfig) {
+function HSTHttpCarbonDioxideSensor(ServiceParam, CharacteristicParam, platform, sensorConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -13,9 +13,9 @@ function HttpWebHookCarbonDioxideSensorAccessory(ServiceParam, CharacteristicPar
   this.type = "co2";
   this.co2PeakLevel = sensorConfig["co2_peak_level"] || 1200;
 
-  this.manufacturer = sensorConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = sensorConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = sensorConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = sensorConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = sensorConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = sensorConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -27,7 +27,7 @@ function HttpWebHookCarbonDioxideSensorAccessory(ServiceParam, CharacteristicPar
   this.service.getCharacteristic(Characteristic.CarbonDioxideDetected).on('get', this.getCarbonDioxideDetected.bind(this));
 }
 
-HttpWebHookCarbonDioxideSensorAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpCarbonDioxideSensor.prototype.changeFromServer = function(urlParams) {
   var cached = this.storage.getItemSync("http-webhook-" + this.id) || 0;
   if (urlParams.value === undefined) {
     this.log.debug("No urlValue");
@@ -54,7 +54,7 @@ HttpWebHookCarbonDioxideSensorAccessory.prototype.changeFromServer = function(ur
   };
 }
 
-HttpWebHookCarbonDioxideSensorAccessory.prototype.getCarbonDioxideLevel = function(callback) {
+HSTHttpCarbonDioxideSensor.prototype.getCarbonDioxideLevel = function(callback) {
   this.log.debug("Getting carbon dioxide level for '%s'...", this.id);
   var temp = this.storage.getItemSync("http-webhook-carbon-dioxide-level-" + this.id);
   if (temp === undefined) {
@@ -63,7 +63,7 @@ HttpWebHookCarbonDioxideSensorAccessory.prototype.getCarbonDioxideLevel = functi
   callback(null, temp);
 };
 
-HttpWebHookCarbonDioxideSensorAccessory.prototype.getCarbonDioxideDetected = function(callback) {
+HSTHttpCarbonDioxideSensor.prototype.getCarbonDioxideDetected = function(callback) {
     this.log.debug("Getting carbon dioxide detected state for '%s'...", this.id);
     var state = this.storage.getItemSync("http-webhook-carbon-dioxide-detected-" + this.id);
     if (state === undefined) {
@@ -72,8 +72,8 @@ HttpWebHookCarbonDioxideSensorAccessory.prototype.getCarbonDioxideDetected = fun
     callback(null, state ? Characteristic.CarbonDioxideDetected.CO2_LEVELS_ABNORMAL : Characteristic.CarbonDioxideDetected.CO2_LEVELS_NORMAL);
 };
 
-HttpWebHookCarbonDioxideSensorAccessory.prototype.getServices = function() {
+HSTHttpCarbonDioxideSensor.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookCarbonDioxideSensorAccessory;
+module.exports = HSTHttpCarbonDioxideSensor;

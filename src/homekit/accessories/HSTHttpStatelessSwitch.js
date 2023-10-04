@@ -1,6 +1,6 @@
 const Constants = require('../../Constants');
 
-function HttpWebHookStatelessSwitchAccessory(ServiceParam, CharacteristicParam, platform, statelessSwitchConfig) {
+function HSTHttpStatelessSwitch(ServiceParam, CharacteristicParam, platform, statelessSwitchConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -13,9 +13,9 @@ function HttpWebHookStatelessSwitchAccessory(ServiceParam, CharacteristicParam, 
   this.name = statelessSwitchConfig["name"];
   this.buttons = statelessSwitchConfig["buttons"] || [];
 
-  this.manufacturer = statelessSwitchConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = statelessSwitchConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = statelessSwitchConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = statelessSwitchConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = statelessSwitchConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = statelessSwitchConfig["serialPrefix"] || "HST-";
 
   this.service = [];
   for (var index = 0; index < this.buttons.length; index++) {
@@ -35,7 +35,7 @@ function HttpWebHookStatelessSwitchAccessory(ServiceParam, CharacteristicParam, 
   this.service.push(informationService);
 };
 
-HttpWebHookStatelessSwitchAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpStatelessSwitch.prototype.changeFromServer = function(urlParams) {
   if (urlParams.event && urlParams.event) {
     for (var index = 0; index < this.service.length; index++) {
       var serviceName = this.service[index].getCharacteristic(Characteristic.Name).value;
@@ -98,8 +98,8 @@ function GetStatelessSwitchProps(single_press, double_press, long_press) {
   return props;
 }
 
-HttpWebHookStatelessSwitchAccessory.prototype.getServices = function() {
+HSTHttpStatelessSwitch.prototype.getServices = function() {
   return this.service;
 };
 
-module.exports = HttpWebHookStatelessSwitchAccessory;
+module.exports = HSTHttpStatelessSwitch;

@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookThermostatAccessory(ServiceParam, CharacteristicParam, platform, thermostatConfig) {
+function HSTHttpThermostat(ServiceParam, CharacteristicParam, platform, thermostatConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -27,9 +27,9 @@ function HttpWebHookThermostatAccessory(ServiceParam, CharacteristicParam, platf
   this.setTargetHeatingCoolingStateForm = thermostatConfig["set_target_heating_cooling_state_form"] || "";
   this.setTargetHeatingCoolingStateHeaders = thermostatConfig["set_target_heating_cooling_state_headers"] || "{}";
 
-  this.manufacturer = thermostatConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = thermostatConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = thermostatConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = thermostatConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = thermostatConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = thermostatConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -47,7 +47,7 @@ function HttpWebHookThermostatAccessory(ServiceParam, CharacteristicParam, platf
   this.service.getCharacteristic(Characteristic.CurrentTemperature).on('get', this.getCurrentTemperature.bind(this));
 }
 
-HttpWebHookThermostatAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpThermostat.prototype.changeFromServer = function(urlParams) {
   if (urlParams.currenttemperature != null) {
     var cachedCurTemp = this.storage.getItemSync("http-webhook-current-temperature-" + this.id);
     if (cachedCurTemp === undefined) {
@@ -101,7 +101,7 @@ HttpWebHookThermostatAccessory.prototype.changeFromServer = function(urlParams) 
   };
 }
 
-HttpWebHookThermostatAccessory.prototype.getTargetTemperature = function(callback) {
+HSTHttpThermostat.prototype.getTargetTemperature = function(callback) {
   this.log.debug("Getting target temperature for '%s'...", this.id);
   var temp = this.storage.getItemSync("http-webhook-target-temperature-" + this.id);
   if (temp === undefined) {
@@ -110,7 +110,7 @@ HttpWebHookThermostatAccessory.prototype.getTargetTemperature = function(callbac
   callback(null, temp);
 };
 
-HttpWebHookThermostatAccessory.prototype.setTargetTemperature = function(temp, callback, context) {
+HSTHttpThermostat.prototype.setTargetTemperature = function(temp, callback, context) {
   this.log("Target temperature for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-target-temperature-" + this.id, temp);
   var urlToCall = this.setTargetTemperatureURL.replace("%f", temp);
@@ -122,7 +122,7 @@ HttpWebHookThermostatAccessory.prototype.setTargetTemperature = function(temp, c
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookThermostatAccessory.prototype.getCurrentTemperature = function(callback) {
+HSTHttpThermostat.prototype.getCurrentTemperature = function(callback) {
   this.log.debug("Getting current temperature for '%s'...", this.id);
   var temp = this.storage.getItemSync("http-webhook-current-temperature-" + this.id);
   if (temp === undefined) {
@@ -131,7 +131,7 @@ HttpWebHookThermostatAccessory.prototype.getCurrentTemperature = function(callba
   callback(null, temp);
 };
 
-HttpWebHookThermostatAccessory.prototype.getTargetHeatingCoolingState = function(callback) {
+HSTHttpThermostat.prototype.getTargetHeatingCoolingState = function(callback) {
   this.log.debug("Getting current Target Heating Cooling state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-target-heating-cooling-state-" + this.id);
   if (state === undefined) {
@@ -140,7 +140,7 @@ HttpWebHookThermostatAccessory.prototype.getTargetHeatingCoolingState = function
   callback(null, state);
 };
 
-HttpWebHookThermostatAccessory.prototype.setTargetHeatingCoolingState = function(newState, callback, context) {
+HSTHttpThermostat.prototype.setTargetHeatingCoolingState = function(newState, callback, context) {
   this.log("Target Heating Cooling state for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-target-heating-cooling-state-" + this.id, newState);
   var urlToCall = this.setTargetHeatingCoolingStateURL.replace("%b", newState);
@@ -152,7 +152,7 @@ HttpWebHookThermostatAccessory.prototype.setTargetHeatingCoolingState = function
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookThermostatAccessory.prototype.getCurrentHeatingCoolingState = function(callback) {
+HSTHttpThermostat.prototype.getCurrentHeatingCoolingState = function(callback) {
   this.log.debug("Getting current Target Heating Cooling state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-current-heating-cooling-state-" + this.id);
   if (state === undefined) {
@@ -161,8 +161,8 @@ HttpWebHookThermostatAccessory.prototype.getCurrentHeatingCoolingState = functio
   callback(null, state);
 };
 
-HttpWebHookThermostatAccessory.prototype.getServices = function() {
+HSTHttpThermostat.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookThermostatAccessory;
+module.exports = HSTHttpThermostat;

@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookSwitchAccessory(ServiceParam, CharacteristicParam, platform, switchConfig) {
+function HSTHttpSwitch(ServiceParam, CharacteristicParam, platform, switchConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -23,9 +23,9 @@ function HttpWebHookSwitchAccessory(ServiceParam, CharacteristicParam, platform,
   this.offForm = switchConfig["off_form"] || "";
   this.offHeaders = switchConfig["off_headers"] || "{}";
 
-  this.manufacturer = switchConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = switchConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = switchConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = switchConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = switchConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = switchConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -36,7 +36,7 @@ function HttpWebHookSwitchAccessory(ServiceParam, CharacteristicParam, platform,
   this.service.getCharacteristic(Characteristic.On).on('get', this.getState.bind(this)).on('set', this.setState.bind(this));
 }
 
-HttpWebHookSwitchAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpSwitch.prototype.changeFromServer = function(urlParams) {
   var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
   if (cachedState === undefined) {
     cachedState = false;
@@ -63,7 +63,7 @@ HttpWebHookSwitchAccessory.prototype.changeFromServer = function(urlParams) {
   }
 }
 
-HttpWebHookSwitchAccessory.prototype.getState = function(callback) {
+HSTHttpSwitch.prototype.getState = function(callback) {
   this.log.debug("Getting current state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-" + this.id);
   if (state === undefined) {
@@ -72,7 +72,7 @@ HttpWebHookSwitchAccessory.prototype.getState = function(callback) {
   callback(null, state);
 };
 
-HttpWebHookSwitchAccessory.prototype.setState = function(powerOn, callback, context) {
+HSTHttpSwitch.prototype.setState = function(powerOn, callback, context) {
   this.log("Switch state for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-" + this.id, powerOn);
   var urlToCall = this.onURL;
@@ -92,8 +92,8 @@ HttpWebHookSwitchAccessory.prototype.setState = function(powerOn, callback, cont
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookSwitchAccessory.prototype.getServices = function() {
+HSTHttpSwitch.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookSwitchAccessory;
+module.exports = HSTHttpSwitch;

@@ -2,7 +2,7 @@ const { parse } = require('node-persist');
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, fanv2Config) {
+function HSTHttpFanv2(ServiceParam, CharacteristicParam, platform, fanv2Config) {
     Service = ServiceParam;
     Characteristic = CharacteristicParam;
 
@@ -65,9 +65,9 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     this.rotationDirectionForm = fanv2Config["rotation_direction_form"] || "";
     this.rotationDirectionHeaders = fanv2Config["rotation_direction_headers"] || "{}";
 
-    this.manufacturer = fanv2Config["manufacturer"] || "HttpWebHooksPlatform";
-    this.modelPrefix = fanv2Config["modelPrefix"] || "HttpWebHookAccessory-";
-    this.serialPrefix = fanv2Config["serialPrefix"] || "HttpWebHookAccessory-";
+    this.manufacturer = fanv2Config["manufacturer"] || "Hirnschall Technologies";
+    this.modelPrefix = fanv2Config["modelPrefix"] || "HST-";
+    this.serialPrefix = fanv2Config["serialPrefix"] || "HST-";
     
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -93,7 +93,7 @@ function HttpWebHookFanv2Accessory(ServiceParam, CharacteristicParam, platform, 
     }
 }
 
-HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
+HSTHttpFanv2.prototype.changeFromServer = function (urlParams) {
     if (urlParams.state != null) {
         var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
         if (cachedState === undefined) {
@@ -158,7 +158,7 @@ HttpWebHookFanv2Accessory.prototype.changeFromServer = function (urlParams) {
     };
 }
 
-HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
+HSTHttpFanv2.prototype.getState = function (callback) {
     var state = this.storage.getItemSync("http-webhook-" + this.id);
     
     var stateBool = state === "true" || state === true;
@@ -169,7 +169,7 @@ HttpWebHookFanv2Accessory.prototype.getState = function (callback) {
     callback(null, stateBool?1:0);
 };
 
-HttpWebHookFanv2Accessory.prototype.setState = function (state, callback, context) {
+HSTHttpFanv2.prototype.setState = function (state, callback, context) {
     var stateBool = state ? "true":"false";
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' state to '%s'.", this.id ,stateBool);
     this.storage.setItemSync("http-webhook-" + this.id, state);
@@ -182,7 +182,7 @@ HttpWebHookFanv2Accessory.prototype.setState = function (state, callback, contex
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
+HSTHttpFanv2.prototype.getSpeed = function (callback) {
     //setting values to 0 without updating cachedValue may result in homekit resetting the value to 100% once the device is turned on, if getValue was called when the device was off
     var cachedSpeed = this.storage.getItemSync("http-webhook-speed-" + this.id);
     if (cachedSpeed === undefined) {
@@ -194,7 +194,7 @@ HttpWebHookFanv2Accessory.prototype.getSpeed = function (callback) {
     callback(null, parseInt(cachedSpeed));
 };
 
-HttpWebHookFanv2Accessory.prototype.setSpeed = function (speed, callback, context) {
+HSTHttpFanv2.prototype.setSpeed = function (speed, callback, context) {
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' speed to '%s\%'.", this.id ,speed);
     var newState = speed > 0;
     this.storage.setItemSync("http-webhook-" + this.id, newState);
@@ -217,7 +217,7 @@ HttpWebHookFanv2Accessory.prototype.setSpeed = function (speed, callback, contex
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.getLockState = function (callback) {
+HSTHttpFanv2.prototype.getLockState = function (callback) {
     var lockstate = this.storage.getItemSync("http-webhook-lockstate-" + this.id);
     if (lockstate === undefined) {
         lockstate = false;
@@ -228,7 +228,7 @@ HttpWebHookFanv2Accessory.prototype.getLockState = function (callback) {
     callback(null, stateBool?1:0);
 };
 
-HttpWebHookFanv2Accessory.prototype.setLockState = function (lockState, callback, context) {
+HSTHttpFanv2.prototype.setLockState = function (lockState, callback, context) {
     var stateBool = lockState === "true" || lockState === true;
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' lock state to '%s'.", this.id ,stateBool);
     this.storage.setItemSync("http-webhook-lockstate-" + this.id, lockState);
@@ -241,7 +241,7 @@ HttpWebHookFanv2Accessory.prototype.setLockState = function (lockState, callback
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.getTargetState = function (callback) {
+HSTHttpFanv2.prototype.getTargetState = function (callback) {
     var targetState = this.storage.getItemSync("http-webhook-targetstate-" + this.id);
     if (targetState === undefined) {
         targetState = false;
@@ -251,7 +251,7 @@ HttpWebHookFanv2Accessory.prototype.getTargetState = function (callback) {
     callback(null, stateBool?1:0);
 };
 
-HttpWebHookFanv2Accessory.prototype.setTargetState = function (targetState, callback, context) {
+HSTHttpFanv2.prototype.setTargetState = function (targetState, callback, context) {
     var stateBool = targetState === "true" || targetState === true;
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' target state to '%s'.", this.id ,stateBool);
     this.storage.setItemSync("http-webhook-targetstate-" + this.id, targetState);
@@ -265,7 +265,7 @@ HttpWebHookFanv2Accessory.prototype.setTargetState = function (targetState, call
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.getSwingMode = function (callback) {
+HSTHttpFanv2.prototype.getSwingMode = function (callback) {
     var swingMode = this.storage.getItemSync("http-webhook-swingmode-" + this.id);
     if (swingMode === undefined) {
         swingMode = false;
@@ -275,7 +275,7 @@ HttpWebHookFanv2Accessory.prototype.getSwingMode = function (callback) {
     callback(null, modeBool?1:0);
 };
 
-HttpWebHookFanv2Accessory.prototype.setSwingMode = function (swingMode, callback, context) {
+HSTHttpFanv2.prototype.setSwingMode = function (swingMode, callback, context) {
     var modeBool = swingMode === "true" || swingMode === true;
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' swing mode to '%s'.", this.id ,modeBool);
     this.storage.setItemSync("http-webhook-swingmode-" + this.id, swingMode);
@@ -289,7 +289,7 @@ HttpWebHookFanv2Accessory.prototype.setSwingMode = function (swingMode, callback
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.getRotationDirection = function (callback) {
+HSTHttpFanv2.prototype.getRotationDirection = function (callback) {
     var rotationDirection = this.storage.getItemSync("http-webhook-rotationdirection-" + this.id);
     if (rotationDirection === undefined) {
         rotationDirection = false;
@@ -299,7 +299,7 @@ HttpWebHookFanv2Accessory.prototype.getRotationDirection = function (callback) {
     callback(null, directionBool?1:0);
 };
 
-HttpWebHookFanv2Accessory.prototype.setRotationDirection = function (rotationDirection, callback, context) {
+HSTHttpFanv2.prototype.setRotationDirection = function (rotationDirection, callback, context) {
     var directionBool = rotationDirection === "true" || rotationDirection === true;
     this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' rotation direction to '%s'.", this.id ,directionBool);
     this.storage.setItemSync("http-webhook-rotationdirection-" + this.id, rotationDirection);
@@ -312,13 +312,13 @@ HttpWebHookFanv2Accessory.prototype.setRotationDirection = function (rotationDir
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookFanv2Accessory.prototype.replaceVariables = function (text, state, speed) {
+HSTHttpFanv2.prototype.replaceVariables = function (text, state, speed) {
     return text.replace("%statusPlaceholder", state).replace("%speedPlaceholder", speed);
 };
 
 
-HttpWebHookFanv2Accessory.prototype.getServices = function () {
+HSTHttpFanv2.prototype.getServices = function () {
     return [this.service, this.informationService];
 };
 
-module.exports = HttpWebHookFanv2Accessory;
+module.exports = HSTHttpFanv2;

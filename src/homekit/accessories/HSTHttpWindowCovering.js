@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookWindowCoveringAccessory(ServiceParam, CharacteristicParam, platform, windowcoveringConfig) {
+function HSTHttpWindowCovering(ServiceParam, CharacteristicParam, platform, windowcoveringConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -45,9 +45,9 @@ function HttpWebHookWindowCoveringAccessory(ServiceParam, CharacteristicParam, p
   this.setTargetPositionCloseHeaders = windowcoveringConfig["close_headers"] || "{}";
   this.autoSetCurrentPosition = windowcoveringConfig["auto_set_current_position"] || false;
   
-  this.manufacturer = windowcoveringConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = windowcoveringConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = windowcoveringConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = windowcoveringConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = windowcoveringConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = windowcoveringConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -60,7 +60,7 @@ function HttpWebHookWindowCoveringAccessory(ServiceParam, CharacteristicParam, p
   this.service.getCharacteristic(Characteristic.PositionState).on('get', this.getPositionState.bind(this));
 }
 
-HttpWebHookWindowCoveringAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpWindowCovering.prototype.changeFromServer = function(urlParams) {
   if (urlParams.currentposition != null) {
     var cachedCurrentPosition = this.storage.getItemSync("http-webhook-current-position-" + this.id);
     if (cachedCurrentPosition === undefined) {
@@ -107,7 +107,7 @@ HttpWebHookWindowCoveringAccessory.prototype.changeFromServer = function(urlPara
   };
 }
 
-HttpWebHookWindowCoveringAccessory.prototype.getTargetPosition = function(callback) {
+HSTHttpWindowCovering.prototype.getTargetPosition = function(callback) {
   this.log.debug("Getting current Target Position for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-target-position-" + this.id);
   if (state === undefined) {
@@ -116,7 +116,7 @@ HttpWebHookWindowCoveringAccessory.prototype.getTargetPosition = function(callba
   callback(null, state);
 };
 
-HttpWebHookWindowCoveringAccessory.prototype.setTargetPosition = function(newState, callback, context) {
+HSTHttpWindowCovering.prototype.setTargetPosition = function(newState, callback, context) {
   this.log("Target Position State for '%s'...", this.id);
   this.log("New target state is: " + newState);
   this.storage.setItemSync("http-webhook-target-position-" + this.id, newState);
@@ -182,7 +182,7 @@ HttpWebHookWindowCoveringAccessory.prototype.setTargetPosition = function(newSta
   }).bind(this), null, Constants.COVERS_REQUEST_TIMEOUT);
 };
 
-HttpWebHookWindowCoveringAccessory.prototype.getCurrentPosition = function(callback) {
+HSTHttpWindowCovering.prototype.getCurrentPosition = function(callback) {
   this.log.debug("Getting Current Position for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-current-position-" + this.id);
   if (state === undefined) {
@@ -191,7 +191,7 @@ HttpWebHookWindowCoveringAccessory.prototype.getCurrentPosition = function(callb
   callback(null, state);
 };
 
-HttpWebHookWindowCoveringAccessory.prototype.getPositionState = function(callback) {
+HSTHttpWindowCovering.prototype.getPositionState = function(callback) {
   this.log.debug("Getting position state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-position-state-" + this.id);
   if (state === undefined) {
@@ -200,8 +200,8 @@ HttpWebHookWindowCoveringAccessory.prototype.getPositionState = function(callbac
   callback(null, state);
 };
 
-HttpWebHookWindowCoveringAccessory.prototype.getServices = function() {
+HSTHttpWindowCovering.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookWindowCoveringAccessory;
+module.exports = HSTHttpWindowCovering;

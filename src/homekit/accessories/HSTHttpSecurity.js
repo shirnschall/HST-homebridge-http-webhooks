@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookSecurityAccessory(ServiceParam, CharacteristicParam, platform, securityConfig) {
+function HSTHttpSecurity(ServiceParam, CharacteristicParam, platform, securityConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -19,9 +19,9 @@ function HttpWebHookSecurityAccessory(ServiceParam, CharacteristicParam, platfor
   this.setStateForm = securityConfig["set_state_form"] || "";
   this.setStateHeaders = securityConfig["set_state_headers"] || "{}";
 
-  this.manufacturer = securityConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = securityConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = securityConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = securityConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = securityConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = securityConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -33,7 +33,7 @@ function HttpWebHookSecurityAccessory(ServiceParam, CharacteristicParam, platfor
   this.service.getCharacteristic(Characteristic.SecuritySystemCurrentState).on('get', this.getCurrentSecurityState.bind(this));
 }
 
-HttpWebHookSecurityAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpSecurity.prototype.changeFromServer = function(urlParams) {
   var cachedCurrentState = this.storage.getItemSync("http-webhook-current-security-state-" + this.id);
   if (cachedCurrentState === undefined) {
     cachedCurrentState = Characteristic.SecuritySystemCurrentState.DISARMED;
@@ -69,7 +69,7 @@ HttpWebHookSecurityAccessory.prototype.changeFromServer = function(urlParams) {
   };
 }
 
-HttpWebHookSecurityAccessory.prototype.getTargetSecurityState = function(callback) {
+HSTHttpSecurity.prototype.getTargetSecurityState = function(callback) {
   this.log.debug("Getting Target Security state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-target-security-state-" + this.id);
   if (state === undefined) {
@@ -78,7 +78,7 @@ HttpWebHookSecurityAccessory.prototype.getTargetSecurityState = function(callbac
   callback(null, state);
 };
 
-HttpWebHookSecurityAccessory.prototype.setTargetSecurityState = function(newState, callback, context) {
+HSTHttpSecurity.prototype.setTargetSecurityState = function(newState, callback, context) {
   this.log("Target Security state for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-target-security-state-" + this.id, newState);
   this.storage.setItemSync("http-webhook-current-security-state-" + this.id, newState);
@@ -92,7 +92,7 @@ HttpWebHookSecurityAccessory.prototype.setTargetSecurityState = function(newStat
   }).bind(this));
 };
 
-HttpWebHookSecurityAccessory.prototype.getCurrentSecurityState = function(callback) {
+HSTHttpSecurity.prototype.getCurrentSecurityState = function(callback) {
   this.log.debug("Getting Current Security state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-current-security-state-" + this.id);
   if (state === undefined) {
@@ -101,8 +101,8 @@ HttpWebHookSecurityAccessory.prototype.getCurrentSecurityState = function(callba
   callback(null, state);
 };
 
-HttpWebHookSecurityAccessory.prototype.getServices = function() {
+HSTHttpSecurity.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookSecurityAccessory;
+module.exports = HSTHttpSecurity;

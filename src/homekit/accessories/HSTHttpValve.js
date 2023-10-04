@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookValveAccessory(ServiceParam, CharacteristicParam, platform, valveConfig) {
+function HSTHttpValve(ServiceParam, CharacteristicParam, platform, valveConfig) {
     Service = ServiceParam;
     Characteristic = CharacteristicParam;
 
@@ -24,9 +24,9 @@ function HttpWebHookValveAccessory(ServiceParam, CharacteristicParam, platform, 
     this.offForm = valveConfig["off_form"] || "";
     this.offHeaders = valveConfig["off_headers"] || "{}";
 
-    this.manufacturer = valveConfig["manufacturer"] || "HttpWebHooksPlatform";
-    this.modelPrefix = valveConfig["modelPrefix"] || "HttpWebHookAccessory-";
-    this.serialPrefix = valveConfig["serialPrefix"] || "HttpWebHookAccessory-";
+    this.manufacturer = valveConfig["manufacturer"] || "Hirnschall Technologies";
+    this.modelPrefix = valveConfig["modelPrefix"] || "HST-";
+    this.serialPrefix = valveConfig["serialPrefix"] || "HST-";
 
     this.informationService = new Service.AccessoryInformation();
     this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -59,7 +59,7 @@ function HttpWebHookValveAccessory(ServiceParam, CharacteristicParam, platform, 
     this.category = 30;
 }
 
-HttpWebHookValveAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpValve.prototype.changeFromServer = function(urlParams) {
     var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
     if (cachedState === undefined) {
         cachedState = 0;
@@ -105,7 +105,7 @@ HttpWebHookValveAccessory.prototype.changeFromServer = function(urlParams) {
     }
 };
 
-HttpWebHookValveAccessory.prototype.getState = function(callback) {
+HSTHttpValve.prototype.getState = function(callback) {
     this.log.debug("Getting current state for", this.id);
     var state = this.storage.getItemSync("http-webhook-" + this.id);
     if (state === undefined) {
@@ -115,7 +115,7 @@ HttpWebHookValveAccessory.prototype.getState = function(callback) {
     callback(null, state);
 };
 
-HttpWebHookValveAccessory.prototype.getStatusFault = function(callback) {
+HSTHttpValve.prototype.getStatusFault = function(callback) {
     this.log.debug("Getting status fault for", this.id);
     var statusFault = this.storage.getItemSync("http-webhook-" + this.id + "-statusFault");
     if (statusFault === undefined) {
@@ -125,7 +125,7 @@ HttpWebHookValveAccessory.prototype.getStatusFault = function(callback) {
     callback(null, statusFault);
 };
 
-HttpWebHookValveAccessory.prototype.setState = function(active, callback, context) {
+HSTHttpValve.prototype.setState = function(active, callback, context) {
     this.log.info("Set valve state for", this.id, "to", active);
     this.storage.setItemSync("http-webhook-" + this.id, active);
 
@@ -148,8 +148,8 @@ HttpWebHookValveAccessory.prototype.setState = function(active, callback, contex
     Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookValveAccessory.prototype.getServices = function() {
+HSTHttpValve.prototype.getServices = function() {
     return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookValveAccessory;
+module.exports = HSTHttpValve;

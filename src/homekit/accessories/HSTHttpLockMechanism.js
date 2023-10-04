@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookLockMechanismAccessory(ServiceParam, CharacteristicParam, platform, lockMechanismOpenerConfig) {
+function HSTHttpLockMechanism(ServiceParam, CharacteristicParam, platform, lockMechanismOpenerConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -24,9 +24,9 @@ function HttpWebHookLockMechanismAccessory(ServiceParam, CharacteristicParam, pl
   this.setLockTargetStateCloseForm = lockMechanismOpenerConfig["close_form"] || "";
   this.setLockTargetStateCloseHeaders = lockMechanismOpenerConfig["close_headers"] || "{}";
 
-  this.manufacturer = lockMechanismOpenerConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = lockMechanismOpenerConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = lockMechanismOpenerConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = lockMechanismOpenerConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = lockMechanismOpenerConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = lockMechanismOpenerConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -38,7 +38,7 @@ function HttpWebHookLockMechanismAccessory(ServiceParam, CharacteristicParam, pl
   this.service.getCharacteristic(Characteristic.LockCurrentState).on('get', this.getLockCurrentState.bind(this));
 }
 
-HttpWebHookLockMechanismAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpLockMechanism.prototype.changeFromServer = function(urlParams) {
   if (urlParams.lockcurrentstate != null) {
     var cachedLockCurrentState = this.storage.getItemSync("http-webhook-lock-current-state-" + this.id);
     if (cachedLockCurrentState === undefined) {
@@ -72,7 +72,7 @@ HttpWebHookLockMechanismAccessory.prototype.changeFromServer = function(urlParam
   };
 }
 
-HttpWebHookLockMechanismAccessory.prototype.getLockTargetState = function(callback) {
+HSTHttpLockMechanism.prototype.getLockTargetState = function(callback) {
   this.log.debug("Getting current Target Lock State for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-lock-target-state-" + this.id);
   if (state === undefined) {
@@ -81,7 +81,7 @@ HttpWebHookLockMechanismAccessory.prototype.getLockTargetState = function(callba
   callback(null, state);
 };
 
-HttpWebHookLockMechanismAccessory.prototype.setLockTargetState = function(homeKitState, callback, context) {
+HSTHttpLockMechanism.prototype.setLockTargetState = function(homeKitState, callback, context) {
   var doLock = homeKitState === Characteristic.LockTargetState.SECURED;
   var newHomeKitState = doLock ? Characteristic.LockCurrentState.SECURED : Characteristic.LockCurrentState.UNSECURED;
   var newHomeKitStateTarget = doLock ? Characteristic.LockTargetState.SECURED : Characteristic.LockTargetState.UNSECURED;
@@ -113,7 +113,7 @@ HttpWebHookLockMechanismAccessory.prototype.setLockTargetState = function(homeKi
   }).bind(this));
 };
 
-HttpWebHookLockMechanismAccessory.prototype.getLockCurrentState = function(callback) {
+HSTHttpLockMechanism.prototype.getLockCurrentState = function(callback) {
   this.log.debug("Getting Current Lock State for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-lock-current-state-" + this.id);
   if (state === undefined) {
@@ -122,8 +122,8 @@ HttpWebHookLockMechanismAccessory.prototype.getLockCurrentState = function(callb
   callback(null, state);
 };
 
-HttpWebHookLockMechanismAccessory.prototype.getServices = function() {
+HSTHttpLockMechanism.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookLockMechanismAccessory;
+module.exports = HSTHttpLockMechanism;

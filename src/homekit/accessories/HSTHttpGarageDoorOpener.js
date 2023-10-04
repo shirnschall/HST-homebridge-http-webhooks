@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookGarageDoorOpenerAccessory(ServiceParam, CharacteristicParam, platform, garageDoorOpenerConfig) {
+function HSTHttpGarageDoorOpener(ServiceParam, CharacteristicParam, platform, garageDoorOpenerConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -24,9 +24,9 @@ function HttpWebHookGarageDoorOpenerAccessory(ServiceParam, CharacteristicParam,
   this.setTargetDoorStateCloseForm = garageDoorOpenerConfig["close_form"] || "";
   this.setTargetDoorStateCloseHeaders = garageDoorOpenerConfig["close_headers"] || "{}";
 
-  this.manufacturer = garageDoorOpenerConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = garageDoorOpenerConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = garageDoorOpenerConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = garageDoorOpenerConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = garageDoorOpenerConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = garageDoorOpenerConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -39,7 +39,7 @@ function HttpWebHookGarageDoorOpenerAccessory(ServiceParam, CharacteristicParam,
   this.service.getCharacteristic(Characteristic.ObstructionDetected).on('get', this.getObstructionDetected.bind(this));
 }
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpGarageDoorOpener.prototype.changeFromServer = function(urlParams) {
   if (urlParams.currentdoorstate != null) {
     var cachedCurrentDoorState = this.storage.getItemSync("http-webhook-current-door-state-" + this.id);
     if (cachedCurrentDoorState === undefined) {
@@ -87,7 +87,7 @@ HttpWebHookGarageDoorOpenerAccessory.prototype.changeFromServer = function(urlPa
   };
 }
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.getTargetDoorState = function(callback) {
+HSTHttpGarageDoorOpener.prototype.getTargetDoorState = function(callback) {
   this.log("Getting current Target Door State for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-target-door-state-" + this.id);
   if (state === undefined) {
@@ -96,7 +96,7 @@ HttpWebHookGarageDoorOpenerAccessory.prototype.getTargetDoorState = function(cal
   callback(null, state);
 };
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.setTargetDoorState = function(newState, callback, context) {
+HSTHttpGarageDoorOpener.prototype.setTargetDoorState = function(newState, callback, context) {
   this.log("Target Door State for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-target-door-state-" + this.id, newState);
 
@@ -121,7 +121,7 @@ HttpWebHookGarageDoorOpenerAccessory.prototype.setTargetDoorState = function(new
   }).bind(this));
 };
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.getCurrentDoorState = function(callback) {
+HSTHttpGarageDoorOpener.prototype.getCurrentDoorState = function(callback) {
   this.log("Getting Current Door State for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-current-door-state-" + this.id);
   if (state === undefined) {
@@ -130,7 +130,7 @@ HttpWebHookGarageDoorOpenerAccessory.prototype.getCurrentDoorState = function(ca
   callback(null, state);
 };
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.getObstructionDetected = function(callback) {
+HSTHttpGarageDoorOpener.prototype.getObstructionDetected = function(callback) {
   this.log("Getting Obstruction Detected for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-obstruction-detected-" + this.id);
   if (state === undefined) {
@@ -139,8 +139,8 @@ HttpWebHookGarageDoorOpenerAccessory.prototype.getObstructionDetected = function
   callback(null, state);
 };
 
-HttpWebHookGarageDoorOpenerAccessory.prototype.getServices = function() {
+HSTHttpGarageDoorOpener.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookGarageDoorOpenerAccessory;
+module.exports = HSTHttpGarageDoorOpener;

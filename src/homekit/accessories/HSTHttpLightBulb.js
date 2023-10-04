@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookLightBulbAccessory(ServiceParam, CharacteristicParam, platform, lightConfig) {
+function HSTHttpLightBulb(ServiceParam, CharacteristicParam, platform, lightConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -30,9 +30,9 @@ function HttpWebHookLightBulbAccessory(ServiceParam, CharacteristicParam, platfo
   this.brightnessHeaders = lightConfig["brightness_headers"] || "{}";
   this.brightnessFactor = lightConfig["brightness_factor"] || 1;
 
-  this.manufacturer = lightConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = lightConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = lightConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = lightConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = lightConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = lightConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -44,7 +44,7 @@ function HttpWebHookLightBulbAccessory(ServiceParam, CharacteristicParam, platfo
   this.service.getCharacteristic(Characteristic.Brightness).on('get', this.getBrightness.bind(this)).on('set', this.setBrightness.bind(this));
 }
 
-HttpWebHookLightBulbAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpLightBulb.prototype.changeFromServer = function(urlParams) {
   var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
   var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
 
@@ -85,7 +85,7 @@ HttpWebHookLightBulbAccessory.prototype.changeFromServer = function(urlParams) {
     };
 };
 
-HttpWebHookLightBulbAccessory.prototype.getState = function(callback) {
+HSTHttpLightBulb.prototype.getState = function(callback) {
   var state = this.storage.getItemSync("http-webhook-" + this.id);
   if (state === undefined) {
     state = false;
@@ -94,7 +94,7 @@ HttpWebHookLightBulbAccessory.prototype.getState = function(callback) {
   callback(null, state);
 };
 
-HttpWebHookLightBulbAccessory.prototype.setState = function(state, callback, context) {
+HSTHttpLightBulb.prototype.setState = function(state, callback, context) {
   var stateBool = state ? "true":"false";
   this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' state to '%s'.", this.id ,stateBool);
   this.storage.setItemSync("http-webhook-" + this.id, state);
@@ -107,7 +107,7 @@ HttpWebHookLightBulbAccessory.prototype.setState = function(state, callback, con
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
+HSTHttpLightBulb.prototype.getBrightness = function(callback) {
   //setting values to 0 without updating cachedValue may result in homekit resetting the value to 100% once the device is turned on, if getValue was called when the device was off
   var cachedBrightness = this.storage.getItemSync("http-webhook-brightness-" + this.id);
   if (cachedBrightness === undefined) {
@@ -119,7 +119,7 @@ HttpWebHookLightBulbAccessory.prototype.getBrightness = function(callback) {
   callback(null, parseInt(cachedBrightness));
 };
 
-HttpWebHookLightBulbAccessory.prototype.setBrightness = function(brightness, callback, context) {
+HSTHttpLightBulb.prototype.setBrightness = function(brightness, callback, context) {
 
   this.log("\x1b[38;5;147mHomeKit:\x1b[0m Set '%s' brightness to '%s'.", this.id ,brightness);
   var newState = brightness > 0;
@@ -143,12 +143,12 @@ HttpWebHookLightBulbAccessory.prototype.setBrightness = function(brightness, cal
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookLightBulbAccessory.prototype.replaceVariables = function(text, state, brightness) {
+HSTHttpLightBulb.prototype.replaceVariables = function(text, state, brightness) {
   return text.replace("%statusPlaceholder", state).replace("%brightnessPlaceholder", brightness);
 };
 
-HttpWebHookLightBulbAccessory.prototype.getServices = function() {
+HSTHttpLightBulb.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookLightBulbAccessory;
+module.exports = HSTHttpLightBulb;

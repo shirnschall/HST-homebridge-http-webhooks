@@ -1,6 +1,6 @@
 const Constants = require('../../Constants');
 
-function HttpWebHookSensorAccessory(ServiceParam, CharacteristicParam, platform, sensorConfig) {
+function HSTHttpSensor(ServiceParam, CharacteristicParam, platform, sensorConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -14,9 +14,9 @@ function HttpWebHookSensorAccessory(ServiceParam, CharacteristicParam, platform,
   this.autoRelease = sensorConfig["autoRelease"];
   this.autoReleaseTime = sensorConfig["autoReleaseTime"] || Constants.DEFAULT_SENSOR_TIMEOUT;
 
-  this.manufacturer = sensorConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = sensorConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = sensorConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = sensorConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = sensorConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = sensorConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -64,7 +64,7 @@ function HttpWebHookSensorAccessory(ServiceParam, CharacteristicParam, platform,
   }
 }
 
-HttpWebHookSensorAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpSensor.prototype.changeFromServer = function(urlParams) {
   var cached = this.storage.getItemSync("http-webhook-" + this.id);
   var isNumberBased = this.type === "leak" || this.type === "humidity" || this.type === "temperature" || this.type === "airquality" || this.type === "light";
   if (cached === undefined) {
@@ -139,7 +139,7 @@ HttpWebHookSensorAccessory.prototype.changeFromServer = function(urlParams) {
   };
 };
 
-HttpWebHookSensorAccessory.prototype.getState = function(callback) {
+HSTHttpSensor.prototype.getState = function(callback) {
   var state = this.storage.getItemSync("http-webhook-" + this.id);
 
   this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' " + this.type + " value ('%s').", this.id ,state);
@@ -164,8 +164,8 @@ HttpWebHookSensorAccessory.prototype.getState = function(callback) {
   }
 };
 
-HttpWebHookSensorAccessory.prototype.getServices = function() {
+HSTHttpSensor.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookSensorAccessory;
+module.exports = HSTHttpSensor;

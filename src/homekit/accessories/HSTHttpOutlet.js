@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookOutletAccessory(ServiceParam, CharacteristicParam, platform, outletConfig) {
+function HSTHttpOutlet(ServiceParam, CharacteristicParam, platform, outletConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -24,9 +24,9 @@ function HttpWebHookOutletAccessory(ServiceParam, CharacteristicParam, platform,
   this.offForm = outletConfig["off_form"] || "";
   this.offHeaders = outletConfig["off_headers"] || "{}";
 
-  this.manufacturer = outletConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = outletConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = outletConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = outletConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = outletConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = outletConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -38,7 +38,7 @@ function HttpWebHookOutletAccessory(ServiceParam, CharacteristicParam, platform,
   this.service.getCharacteristic(Characteristic.OutletInUse).on('get', this.getStateInUse.bind(this));
 }
 
-HttpWebHookOutletAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpOutlet.prototype.changeFromServer = function(urlParams) {
   var cachedState = this.storage.getItemSync("http-webhook-" + this.id);
   if (cachedState === undefined) {
     cachedState = false;
@@ -85,7 +85,7 @@ HttpWebHookOutletAccessory.prototype.changeFromServer = function(urlParams) {
   }
 }
 
-HttpWebHookOutletAccessory.prototype.getState = function(callback) {
+HSTHttpOutlet.prototype.getState = function(callback) {
   this.log.debug("Getting current state for '%s'...", this.id);
   var state = this.storage.getItemSync("http-webhook-" + this.id);
   if (state === undefined) {
@@ -94,7 +94,7 @@ HttpWebHookOutletAccessory.prototype.getState = function(callback) {
   callback(null, state);
 };
 
-HttpWebHookOutletAccessory.prototype.getStateInUse = function(callback) {
+HSTHttpOutlet.prototype.getStateInUse = function(callback) {
   this.log.debug("Getting current state for '%s'...", this.id);
   var stateInUse = this.storage.getItemSync("http-webhook-" + this.id + "-inUse");
   if (stateInUse === undefined) {
@@ -103,7 +103,7 @@ HttpWebHookOutletAccessory.prototype.getStateInUse = function(callback) {
   callback(null, stateInUse);
 };
 
-HttpWebHookOutletAccessory.prototype.setState = function(powerOn, callback, context) {
+HSTHttpOutlet.prototype.setState = function(powerOn, callback, context) {
   this.log("Switch outlet state for '%s'...", this.id);
   this.storage.setItemSync("http-webhook-" + this.id, powerOn);
   var urlToCall = this.onURL;
@@ -122,8 +122,8 @@ HttpWebHookOutletAccessory.prototype.setState = function(powerOn, callback, cont
   Util.callHttpApi(this.log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, this.rejectUnauthorized, callback, context);
 };
 
-HttpWebHookOutletAccessory.prototype.getServices = function() {
+HSTHttpOutlet.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookOutletAccessory;
+module.exports = HSTHttpOutlet;

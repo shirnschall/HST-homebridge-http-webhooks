@@ -1,7 +1,7 @@
 const Constants = require('../../Constants');
 const Util = require('../../Util');
 
-function HttpWebHookPushButtonAccessory(ServiceParam, CharacteristicParam, platform, pushButtonConfig) {
+function HSTHttpPushButton(ServiceParam, CharacteristicParam, platform, pushButtonConfig) {
   Service = ServiceParam;
   Characteristic = CharacteristicParam;
 
@@ -19,9 +19,9 @@ function HttpWebHookPushButtonAccessory(ServiceParam, CharacteristicParam, platf
   this.pushForm = pushButtonConfig["push_form"] || "";
   this.pushHeaders = pushButtonConfig["push_headers"] || "{}";
 
-  this.manufacturer = pushButtonConfig["manufacturer"] || "HttpWebHooksPlatform";
-  this.modelPrefix = pushButtonConfig["modelPrefix"] || "HttpWebHookAccessory-";
-  this.serialPrefix = pushButtonConfig["serialPrefix"] || "HttpWebHookAccessory-";
+  this.manufacturer = pushButtonConfig["manufacturer"] || "Hirnschall Technologies";
+  this.modelPrefix = pushButtonConfig["modelPrefix"] || "HST-";
+  this.serialPrefix = pushButtonConfig["serialPrefix"] || "HST-";
 
   this.informationService = new Service.AccessoryInformation();
   this.informationService.setCharacteristic(Characteristic.Manufacturer, this.manufacturer);
@@ -32,7 +32,7 @@ function HttpWebHookPushButtonAccessory(ServiceParam, CharacteristicParam, platf
   this.service.getCharacteristic(Characteristic.On).on('get', this.getState.bind(this)).on('set', this.setState.bind(this));
 }
 
-HttpWebHookPushButtonAccessory.prototype.changeFromServer = function(urlParams) {
+HSTHttpPushButton.prototype.changeFromServer = function(urlParams) {
   if (!urlParams.state) {
     return {
       "success" : true
@@ -56,13 +56,13 @@ HttpWebHookPushButtonAccessory.prototype.changeFromServer = function(urlParams) 
   }
 }
 
-HttpWebHookPushButtonAccessory.prototype.getState = function(callback) {
+HSTHttpPushButton.prototype.getState = function(callback) {
   this.log.debug("Getting current state for '%s'...", this.id);
   var state = false;
   callback(null, state);
 };
 
-HttpWebHookPushButtonAccessory.prototype.setState = function(powerOn, callback, context) {
+HSTHttpPushButton.prototype.setState = function(powerOn, callback, context) {
   this.log("Push buttons state change for '%s'...", this.id);
   if (!powerOn) {
     callback(null);
@@ -90,8 +90,8 @@ HttpWebHookPushButtonAccessory.prototype.setState = function(powerOn, callback, 
   }
 };
 
-HttpWebHookPushButtonAccessory.prototype.getServices = function() {
+HSTHttpPushButton.prototype.getServices = function() {
   return [ this.service, this.informationService ];
 };
 
-module.exports = HttpWebHookPushButtonAccessory;
+module.exports = HSTHttpPushButton;
