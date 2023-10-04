@@ -67,24 +67,19 @@ function HSTHttpSensor(ServiceParam, CharacteristicParam, platform, sensorConfig
 HSTHttpSensor.prototype.changeFromServer = function(urlParams) {
   var cached = this.storage.getItemSync("http-webhook-" + this.id);
   var isNumberBased = this.type === "leak" || this.type === "humidity" || this.type === "temperature" || this.type === "airquality" || this.type === "light";
-  if (cached === undefined) {
+  if (typeof cached === 'undefined') {
     cached = isNumberBased ? 0 : false;
   }
-  var noUrlValue = isNumberBased ? urlParams.value === undefined : urlParams.state === undefined;
-  if (noUrlValue) {
-    this.log.debug("No urlValue");
-    return {
-      "success" : true,
-      "state" : cached
-    };
-  }
+
+  if (isNumberBased ? typeof urlParams.value !== 'undefined' :  typeof urlParams.state !== 'undefined' ) {
+  
   var urlValue = isNumberBased ? urlParams.value : urlParams.state === "true";
-  this.log.debug("urlValue: "+ urlValue);
   this.storage.setItemSync("http-webhook-" + this.id, urlValue);
-  this.log.debug("cached: "+ cached);
-  this.log.debug("cached !== urlValue: "+ (cached !== urlValue));
+
   if (cached !== urlValue) {
     this.log("\x1b[38;2;253;182;mExternal:\x1b[0m Set '%s' " + this.type + " to '%s'.", this.id ,urlValue);
+
+    cached = urlValue;
 
     if (this.type === "contact") {
       this.service.getCharacteristic(Characteristic.ContactSensorState).updateValue(urlValue ? Characteristic.ContactSensorState.CONTACT_DETECTED : Characteristic.ContactSensorState.CONTACT_NOT_DETECTED, undefined, Constants.CONTEXT_FROM_WEBHOOK);
@@ -134,8 +129,13 @@ HSTHttpSensor.prototype.changeFromServer = function(urlParams) {
     }
 
   }
+} else{
+  this.log.debug("\x1b[38;2;253;182;mExternal:\x1b[0m '%s' updated without url value.", this.id);
+}
+
   return {
-    "success" : true
+    "success" : true,
+    "state" : cached
   };
 };
 
@@ -144,7 +144,7 @@ HSTHttpSensor.prototype.getState = function(callback) {
 
   this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' " + this.type + " value ('%s').", this.id ,state);
   
-  if (state === undefined) {
+  if (typeof state === 'undefined') {
     state = false;
   }
   if (this.type === "contact") {

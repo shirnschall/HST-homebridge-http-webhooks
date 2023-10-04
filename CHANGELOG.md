@@ -1,4 +1,42 @@
 ### 0.2.0
+Notes:
+  -First release of homebridge-HST-http-webhook 
+  -The goal of this fork is to fix bugs, change expected behaviour issues, review and rewrite existing code base
+
+Breaking change:
+  -changed naming convention from HttpWebHook%NAME%Acsessory to HSTHttp%NAME% for accessory type %NAME%
+
+Fixes/Changes:
+  -issue:
+  -device: dimmable devices (fans, lamps, etc.)
+  -description: When e.g. a lamp is turned off, a brightness value of 0 is returned regardless of the actual value. However, the cached brightness value is not changed. This results in the following unexpected behaviour: The brightness is at e.g. 70%, the device is off. Homkit reloads the accessory status and gets a brightness value of 0 from the server. When homekit enables the device it sets the brightness to 100%, resetting the brightness setting. 
+  -fix: when a device is off and homekit requests an update, the server will responde set active=false but not change the current brightness value. This way, enabeling the device through homekit will turn it on, but not thange the brightness. 
+  -notes: the issue is with all "dimmable" devices (fans, lamps ,etc.)
+
+  -issue: 
+  -device: fanv2
+  -description: When the device status is changed from the server (e.g. a physical switch turns on the fan), homebridge will notify homekit of the change, displaying the fan as "on". However, the cached values are not updated resulting in an "off" response once homkit requests a status update. The fan will now be displayed as off in homkit when it is on.
+  -fix: update cached values inside changeFromServer() on call
+
+  -issue:
+  -device: all
+  -description: some functions return a wrong type (e.g. bool instead of int) in regard to the homebridge api reference
+  fix: change return type to fit the homebridge api reference expected return type
+
+  -change:
+  -device: all
+  -description: removed unnessecary code and variables
+
+  -change:
+  -device: all
+  -descritpion: added "manufacturer", "modelPrefix" and "serialPrefix" accessory config options to change the manufactureer, model number and serial number displayed in the home app
+
+  -change:
+  -device: all
+  -description: changed the log messages and added color. "Server:" for messages from the plugin, "Homekit:" for events originating from homekit, and "External:" for events originating from the accessory (e.g. state change through a physical switch).
+
+  -change:
+  -description: switched from if(myVar === undefined) to if (typeof myVar === 'undefined') as per https://stackoverflow.com/questions/3390396/how-can-i-check-for-undefined-in-javascript suggestion
 
 ### 0.1.17
 

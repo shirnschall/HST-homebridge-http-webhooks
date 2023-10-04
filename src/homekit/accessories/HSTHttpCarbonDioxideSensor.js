@@ -29,46 +29,44 @@ function HSTHttpCarbonDioxideSensor(ServiceParam, CharacteristicParam, platform,
 
 HSTHttpCarbonDioxideSensor.prototype.changeFromServer = function(urlParams) {
   var cached = this.storage.getItemSync("http-webhook-" + this.id) || 0;
-  if (urlParams.value === undefined) {
-    this.log.debug("No urlValue");
-    return {
-      "success" : true,
-      "state" : cached
-    };
-  }
+  if (typeof urlParams.value !== 'undefined') {
   var urlValue = urlParams.value;
   var co2Detected = urlValue > this.co2PeakLevel;
-  this.log.debug("urlValue: "+ urlValue);
-  this.log.debug("co2Detected: "+ co2Detected);
+
   this.storage.setItemSync("http-webhook-carbon-dioxide-level-" + this.id, urlValue);
   this.storage.setItemSync("http-webhook-carbon-dioxide-detected-" + this.id, co2Detected);
-  this.log.debug("cached: "+ cached);
-  this.log.debug("cached !== urlValue: "+ (cached !== urlValue));
+
   if (cached !== urlValue) {
     this.log("Change HomeKit value for " + this.type + " sensor to '%s'.", urlValue);
+    cached = urlValue;
     this.service.getCharacteristic(Characteristic.CarbonDioxideLevel).updateValue(urlValue, undefined, Constants.CONTEXT_FROM_WEBHOOK);
     this.service.getCharacteristic(Characteristic.CarbonDioxideDetected).updateValue(co2Detected ? Characteristic.CarbonDioxideDetected.CO2_LEVELS_ABNORMAL : Characteristic.CarbonDioxideDetected.CO2_LEVELS_NORMAL, undefined, Constants.CONTEXT_FROM_WEBHOOK);
   }
+  } else{
+    this.log.debug("\x1b[38;2;253;182;mExternal:\x1b[0m '%s' updated without url value.", this.id);
+  }
   return {
-    "success" : true
+    "success" : true,
+    "state" : cached
   };
 }
 
 HSTHttpCarbonDioxideSensor.prototype.getCarbonDioxideLevel = function(callback) {
-  this.log.debug("Getting carbon dioxide level for '%s'...", this.id);
   var temp = this.storage.getItemSync("http-webhook-carbon-dioxide-level-" + this.id);
-  if (temp === undefined) {
+  if (typeof temp === 'undefined') {
     temp = 0;
   }
+
+  this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' carbon dioxide level ('%s').", this.id ,temp);
   callback(null, temp);
 };
 
 HSTHttpCarbonDioxideSensor.prototype.getCarbonDioxideDetected = function(callback) {
-    this.log.debug("Getting carbon dioxide detected state for '%s'...", this.id);
     var state = this.storage.getItemSync("http-webhook-carbon-dioxide-detected-" + this.id);
     if (state === undefined) {
         state = false;
     }
+    this.log.debug("\x1b[38;5;147mHomeKit:\x1b[0m Get '%s' carbon dioxide detected ('%s').", this.id ,state);
     callback(null, state ? Characteristic.CarbonDioxideDetected.CO2_LEVELS_ABNORMAL : Characteristic.CarbonDioxideDetected.CO2_LEVELS_NORMAL);
 };
 

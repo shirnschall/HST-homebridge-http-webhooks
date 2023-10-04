@@ -61,42 +61,48 @@ function HSTHttpWindowCovering(ServiceParam, CharacteristicParam, platform, wind
 }
 
 HSTHttpWindowCovering.prototype.changeFromServer = function(urlParams) {
-  if (urlParams.currentposition != null) {
-    var cachedCurrentPosition = this.storage.getItemSync("http-webhook-current-position-" + this.id);
-    if (cachedCurrentPosition === undefined) {
+  var cachedCurrentPosition = this.storage.getItemSync("http-webhook-current-position-" + this.id);
+  var cachedTargetPosition = this.storage.getItemSync("http-webhook-target-position-" + this.id);
+  var cachedPositionState = this.storage.getItemSync("http-webhook-position-state-" + this.id);
+
+
+  if (typeof urlParams.currentposition !== 'undefined') {
+    if (typeof cachedCurrentPosition === 'undefined') {
       cachedCurrentPosition = 100;
     }
     this.storage.setItemSync("http-webhook-current-position-" + this.id, urlParams.currentposition);
     if (cachedCurrentPosition !== urlParams.currentposition) {
+      cachedCurrentPosition = urlParams.currentposition;
       this.log("Change Current Window Covering for covers to '%s'.", urlParams.currentposition);
       this.service.getCharacteristic(Characteristic.CurrentPosition).updateValue(urlParams.currentposition, undefined, Constants.CONTEXT_FROM_WEBHOOK);
     }
   }
 
-  if (urlParams.targetposition != null) {
-    var cachedTargetPosition = this.storage.getItemSync("http-webhook-target-position-" + this.id);
-    if (cachedTargetPosition === undefined) {
+  if (typeof urlParams.targetposition !== 'undefined') {
+    if (typeof cachedTargetPosition === 'undefined') {
       cachedTargetPosition = 100;
     }
     this.storage.setItemSync("http-webhook-target-position-" + this.id, urlParams.targetposition);
     if (cachedTargetPosition !== urlParams.targetposition) {
-      if (urlParams.targetposition) {
+      //if (urlParams.targetposition) { //is this necessary? it blocks targetposition=0? 
+        //TODO: more testing
+        cachedTargetPosition = urlParams.targetposition;
         this.log("Change Target Position for covers to '%s'.", urlParams.targetposition);
         this.service.getCharacteristic(Characteristic.TargetPosition).updateValue(urlParams.targetposition, undefined, Constants.CONTEXT_FROM_WEBHOOK);
-      }
+      //}
     }
   }
-  if (urlParams.positionstate != null) {
-    var cachedPositionState = this.storage.getItemSync("http-webhook-position-state-" + this.id);
-    if (cachedPositionState === undefined) {
+  if (typeof urlParams.positionstate !== 'undefined') {
+    if (typeof cachedPositionState === 'undefined') {
       cachedPositionState = false;
     }
     this.storage.setItemSync("http-webhook-position-state-" + this.id, urlParams.positionstate);
     if (cachedPositionState !== urlParams.positionstate) {
-      if (urlParams.positionstate) {
+      //if (urlParams.positionstate) {
+        cachedPositionState = urlParams.positionstate;
         this.log("Change Position State for covers to '%s'.", urlParams.positionstate);
         this.service.getCharacteristic(Characteristic.PositionState).updateValue(urlParams.positionstate, undefined, Constants.CONTEXT_FROM_WEBHOOK);
-      }
+      //}
     }
   }
   return {

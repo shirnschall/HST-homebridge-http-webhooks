@@ -13,7 +13,7 @@ var HSTHttpStatelessSwitch = require('./accessories/HSTHttpStatelessSwitch');
 var HSTHttpLockMechanism = require('./accessories/HSTHttpLockMechanism');
 var HSTHttpWindowCovering = require('./accessories/HSTHttpWindowCovering');
 var HSTHttpFanv2 = require('./accessories/HSTHttpFanv2');
-var HSTHttpCarbonDioxideSensory = require('./accessories/HSTHttpCarbonDioxideSensor');
+var HSTHttpCarbonDioxideSensor = require('./accessories/HSTHttpCarbonDioxideSensor');
 var HSTHttpValve = require('./accessories/HSTHttpValve');
 
 var Service, Characteristic;
@@ -111,7 +111,7 @@ HSTHttpsPlatform.prototype.accessories = function(callback) {
   }
 
   for (var i = 0; i < this.co2sensors.length; i++) {
-    var co2sensorAccessory = new HSTHttpCarbonDioxideSensory(Service, Characteristic, this, this.co2sensors[i]);
+    var co2sensorAccessory = new HSTHttpCarbonDioxideSensor(Service, Characteristic, this, this.co2sensors[i]);
     accessories.push(co2sensorAccessory);
   }
 

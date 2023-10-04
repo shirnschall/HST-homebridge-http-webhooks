@@ -2,6 +2,10 @@ const Constants = require('./Constants');
 
 var request = require("request");
 
+const isUndefined = function(x){
+  return typeof x === 'undefined';
+}
+
 const callHttpApi = function(log, urlToCall, urlMethod, urlBody, urlForm, urlHeaders, rejectUnauthorized, homeKitCallback, context, onSuccessCallback, onFailureCallback, timeout) {
   if (urlToCall !== "" && context !== Constants.CONTEXT_FROM_WEBHOOK) {
     var theRequest = {
@@ -47,5 +51,6 @@ const callHttpApi = function(log, urlToCall, urlMethod, urlBody, urlForm, urlHea
 };
 
 module.exports = {
-  callHttpApi : callHttpApi
+  callHttpApi : callHttpApi,
+  isUndefined : isUndefined
 };
