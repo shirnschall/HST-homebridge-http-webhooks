@@ -1,12 +1,12 @@
 ### 0.2.0
-Notes:      
+#### Notes:      
   - First release of homebridge-HST-http-webhook 
   - The goal of this fork is to fix bugs, change expected behaviour issues, review and rewrite existing code base
       
-Breaking change:     
+#### Breaking change:     
   - changed naming convention from HttpWebHook%NAME%Acsessory to HSTHttp%NAME% for accessory type %NAME%
       
-Fixes/Changes:      
+#### Fixes/Changes:      
 issue:      
   - device: dimmable devices (fans, lamps, etc.)
   - description: When e.g. a lamp is turned off, a brightness value of 0 is returned regardless of the actual value. However, the cached brightness value is not changed. This results in the following unexpected behaviour: The brightness is at e.g. 70%, the device is off. Homkit reloads the accessory status and gets a brightness value of 0 from the server. When homekit enables the device it sets the brightness to 100%, resetting the brightness setting. 
