@@ -1,4 +1,4 @@
-### 0.2.0
+## 0.2.0
 #### Notes:      
   - First release of homebridge-HST-http-webhook 
   - The goal of this fork is to fix bugs, change expected behaviour issues, review and rewrite existing code base
